@@ -187,6 +187,7 @@ export default function App() {
   const [shuffleIndex, setShuffleIndex] = useState(0);
   const [introFinished, setIntroFinished] = useState(false);
   const [selectedProject, setSelectedProject] = useState<{id: number, src: string, title: string, location: string} | null>(null);
+  const [navTheme, setNavTheme] = useState<'light' | 'dark'>('dark');
   
   const mainRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -196,6 +197,7 @@ export default function App() {
   const bottomTextRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
 
@@ -312,6 +314,27 @@ export default function App() {
         ease: 'expo.out'
       }, '-=0.4');
 
+    // Pin the navigation
+    ScrollTrigger.create({
+      trigger: navRef.current,
+      start: "top 24px",
+      end: "max",
+      pin: true,
+      pinSpacing: false,
+    });
+
+    // Theme switching for nav
+    const themeSections = gsap.utils.toArray('[data-theme]');
+    themeSections.forEach((section: any) => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 60px', // Trigger when section hits the nav area
+        end: 'bottom 60px',
+        onEnter: () => setNavTheme(section.dataset.theme as 'light' | 'dark'),
+        onEnterBack: () => setNavTheme(section.dataset.theme as 'light' | 'dark'),
+      });
+    });
+
     // ScrollTrigger Animations for About Section
     const aboutTexts = gsap.utils.toArray('.about-text');
     aboutTexts.forEach((text: any) => {
@@ -371,29 +394,8 @@ export default function App() {
 
   return (
     <div ref={mainRef} className="min-h-[150vh] bg-[#f5f5f5] font-sans overflow-x-hidden w-full">
-      {/* Sticky Nav */}
-      <nav 
-        className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-12 pt-6 pb-2 mix-blend-difference text-white flex flex-wrap justify-between items-center w-full gap-y-4 transition-opacity duration-1000 pointer-events-auto ${introFinished ? 'opacity-100' : 'opacity-0'}`}
-      >
-        {navItems.map((item, index) => (
-          <div 
-            key={item.id}
-            className="cursor-pointer flex items-center gap-2 group py-2"
-            onMouseEnter={() => setActiveIndex(index)}
-          >
-            <div className="relative flex items-center justify-center w-5 h-5">
-              <span className="absolute inset-0 bg-white transition-transform duration-300 ease-out scale-0 group-hover:scale-100" />
-              <span className="relative font-light text-lg leading-none transition-all duration-300 opacity-60 group-hover:opacity-100 group-hover:text-black">+</span>
-            </div>
-            <span className={`text-[10px] md:text-xs uppercase tracking-[0.2em] font-medium transition-opacity duration-300 ${activeIndex === index ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}`}>
-              {item.label}
-            </span>
-          </div>
-        ))}
-      </nav>
-
       {/* Hero Section */}
-      <div ref={containerRef} className="relative w-full h-[85vh] bg-white text-white">
+      <div ref={containerRef} className="relative w-full h-[85vh] bg-white text-white" data-theme="dark">
         {/* Background Container */}
         <div 
           ref={bgContainerRef}
@@ -431,31 +433,55 @@ export default function App() {
         </div>
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex flex-col justify-between h-full px-6 md:px-10 lg:px-12 pt-20 md:pt-20 lg:pt-20 pb-8 md:pb-12 pointer-events-none">
+        <div className="relative z-10 flex flex-col justify-between h-full pt-8 md:pt-10 lg:pt-10 pb-8 md:pb-12 pointer-events-none">
           
           {/* Top Section */}
           <div className="w-full pointer-events-auto">
-            {/* Stretched Title */}
-            <h1 
-              ref={titleRef}
-              className="flex justify-between w-full text-[5vw] md:text-[5.5vw] lg:text-[6vw] leading-[0.8] font-medium uppercase tracking-tight mb-4"
+            <div className="px-6 md:px-10 lg:px-12">
+              {/* Stretched Title */}
+              <h1 
+                ref={titleRef}
+                className="flex justify-between w-full text-[5vw] md:text-[5.5vw] lg:text-[6vw] leading-[0.8] font-medium uppercase tracking-tight mb-4"
+              >
+                {'FIRST GENERATION HOMES'.split('').map((char, i) => (
+                  <span key={i}>{char === ' ' ? '\u00A0' : char}</span>
+                ))}
+              </h1>
+              
+              {/* End-to-end line */}
+              <div 
+                ref={lineRef}
+                className="w-full h-[1px] mb-4"
+              />
+            </div>
+
+            {/* Navigation Options */}
+            <nav 
+              ref={navRef}
+              className={`flex flex-wrap justify-between items-center w-full px-6 md:px-10 lg:px-12 gap-y-4 transition-all duration-500 ${introFinished ? 'opacity-100' : 'opacity-0'} z-50 ${navTheme === 'dark' ? 'text-white' : 'text-black'}`}
             >
-              {'FIRST GENERATION HOMES'.split('').map((char, i) => (
-                <span key={i}>{char === ' ' ? '\u00A0' : char}</span>
+              {navItems.map((item, index) => (
+                <div 
+                  key={item.id}
+                  className="cursor-pointer flex items-center gap-2 group py-2"
+                  onMouseEnter={() => setActiveIndex(index)}
+                >
+                  <div className="relative flex items-center justify-center w-5 h-5">
+                    <span className={`absolute inset-0 transition-transform duration-300 ease-out scale-0 group-hover:scale-100 ${navTheme === 'dark' ? 'bg-white' : 'bg-black'}`} />
+                    <span className={`relative font-light text-lg leading-none transition-all duration-300 opacity-60 group-hover:opacity-100 ${navTheme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>+</span>
+                  </div>
+                  <span className={`text-[10px] md:text-xs uppercase tracking-[0.2em] font-medium transition-opacity duration-300 ${activeIndex === index ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}`}>
+                    {item.label}
+                  </span>
+                </div>
               ))}
-            </h1>
-            
-            {/* End-to-end line */}
-            <div 
-              ref={lineRef}
-              className="w-full h-[1px] mb-4"
-            />
+            </nav>
           </div>
 
           {/* Bottom Section */}
           <div 
             ref={bottomTextRef}
-            className="flex justify-between items-end w-full pointer-events-auto"
+            className="flex justify-between items-end w-full pointer-events-auto px-6 md:px-10 lg:px-12"
           >
             {/* Left Text */}
             <div className="max-w-lg text-lg md:text-xl lg:text-2xl leading-[1.3] font-normal tracking-tight">
@@ -490,7 +516,7 @@ export default function App() {
       </div>
       
       {/* About Us Section */}
-      <div className="w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden">
+      <div className="w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
         <div className="max-w-[1400px] mx-auto">
           {/* Title */}
           <h2 className="about-text text-6xl md:text-7xl lg:text-[90px] font-cormorant font-light tracking-tight text-gray-900 mb-8 ml-0 md:ml-[5%]">
@@ -566,13 +592,15 @@ export default function App() {
       </div>
 
       {/* Featured Projects Section */}
-      <FeaturedProjects />
+      <div data-theme="dark">
+        <FeaturedProjects />
+      </div>
 
       {/* Values Section */}
       <ValuesSection />
 
       {/* Portfolio Sections */}
-      <div className="bg-[#c1bdae] pb-16 md:pb-24">
+      <div className="bg-[#c1bdae] pb-16 md:pb-24" data-theme="light">
         {categories.map((category) => (
           <PortfolioCategory 
             key={category.id}
@@ -585,13 +613,19 @@ export default function App() {
       </div>
 
       {/* Testimonials Section */}
-      <Testimonials />
+      <div data-theme="dark">
+        <Testimonials />
+      </div>
 
       {/* Team Section */}
-      <TeamSection />
+      <div data-theme="dark">
+        <TeamSection />
+      </div>
 
       {/* Footer Section */}
-      <Footer />
+      <div data-theme="light">
+        <Footer />
+      </div>
 
       {/* Project Modal */}
       <AnimatePresence>

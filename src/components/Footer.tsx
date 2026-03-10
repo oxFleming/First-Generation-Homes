@@ -40,7 +40,7 @@ export const Footer = () => {
   return (
     <footer ref={footerRef} className="bg-[#c1bdae] text-[#141414] pt-6 pb-8 md:pb-12 px-6 md:px-12 w-full flex flex-col min-h-screen justify-between">
       {/* Massive Text & Action Buttons */}
-      <div className="flex flex-col items-center justify-center w-full mb-8 md:mb-12 mt-[10vh] md:mt-[12vh]">
+      <div className="flex flex-col items-center justify-center w-full mb-8 md:mb-12 mt-[15vh] md:mt-[20vh]">
         <div className="overflow-hidden w-full">
           <h1 className="footer-title text-[clamp(2.5rem,9vw,10rem)] leading-[0.85] font-medium tracking-tight uppercase text-center w-full">
             FIRST GENERATION
@@ -90,24 +90,13 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Column 2: Contact & Networks */}
+        {/* Column 2: Contact */}
         <div className="footer-col flex flex-col gap-6">
           <div>
             <h4 className="text-xs md:text-sm font-semibold mb-3">Contact</h4>
             <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <p>630-326-5117</p>
               <p className="break-all">MATTHEW.KALESANWO@FGIPGROUP.NET</p>
-            </div>
-          </div>
-          <div>
-            <h4 className="text-xs md:text-sm font-semibold mb-3">Networks</h4>
-            <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
-              <a href="#" className="flex items-center gap-2 hover:opacity-70 transition-opacity">
-                <span>+</span> INSTAGRAM
-              </a>
-              <a href="#" className="flex items-center gap-2 hover:opacity-70 transition-opacity">
-                <span>+</span> LINKEDIN
-              </a>
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { ArrowDown } from 'lucide-react';
 export function ValuesSection() {
   return (
     <>
-      <section className="relative w-full min-h-[110vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[110vh] flex items-center justify-center overflow-hidden" data-theme="dark">
         {/* Background Image */}
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat scale-105"
@@ -26,7 +26,7 @@ export function ValuesSection() {
       </section>
 
       {/* Blending Section */}
-      <section className="w-full bg-[#c1bdae] px-6 md:px-12 py-16 md:py-24 text-[#1a1a1a]">
+      <section className="w-full bg-[#c1bdae] px-6 md:px-12 py-16 md:py-24 text-[#1a1a1a]" data-theme="light">
         <div className="max-w-7xl mx-auto">
           <p className="text-2xl md:text-3xl lg:text-4xl font-medium leading-tight max-w-4xl mb-12">
             From transparent communication to flawless execution, we are committed to building absolute trust alongside every legacy home we deliver.
