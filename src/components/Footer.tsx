@@ -75,14 +75,14 @@ export const Footer = () => {
       </div>
 
       {/* Bottom Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 w-full max-w-[1800px] mx-auto mt-auto pt-8 border-t border-black/10">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-4 w-full max-w-[1800px] mx-auto mt-auto pt-8 border-t border-black/10">
         {/* Column 1: Links */}
         <div className="footer-col flex flex-col gap-2">
-          <div className="flex items-start gap-4 mb-2">
-            <span className="font-light text-xl leading-none">+</span>
+          <div className="flex items-start gap-3 mb-2">
+            <span className="font-light text-base leading-none mt-1">+</span>
             <div className="flex flex-col gap-2">
               {['Agency', 'Achievements', 'Immersion', 'Contact'].map((item, index) => (
-                <a key={index} href={`#${item.toLowerCase()}`} className="text-lg md:text-xl font-medium hover:opacity-70 transition-opacity">
+                <a key={index} href={`#${item.toLowerCase()}`} className="text-sm md:text-base font-medium hover:opacity-70 transition-opacity">
                   {item}
                 </a>
               ))}
@@ -93,15 +93,15 @@ export const Footer = () => {
         {/* Column 2: Contact & Networks */}
         <div className="footer-col flex flex-col gap-6">
           <div>
-            <h4 className="text-sm md:text-base mb-3">Contact</h4>
-            <div className="flex flex-col gap-1 text-xs md:text-sm tracking-widest uppercase font-mono">
+            <h4 className="text-xs md:text-sm font-semibold mb-3">Contact</h4>
+            <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <p>630-326-5117</p>
-              <p>MATTHEW.KALESANWO@FGIPGROUP.NET</p>
+              <p className="break-all">MATTHEW.KALESANWO@FGIPGROUP.NET</p>
             </div>
           </div>
           <div>
-            <h4 className="text-sm md:text-base mb-3">Networks</h4>
-            <div className="flex flex-col gap-1 text-xs md:text-sm tracking-widest uppercase font-mono">
+            <h4 className="text-xs md:text-sm font-semibold mb-3">Networks</h4>
+            <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <a href="#" className="flex items-center gap-2 hover:opacity-70 transition-opacity">
                 <span>+</span> INSTAGRAM
               </a>
@@ -112,38 +112,46 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Column 3: Locations 1 */}
+        {/* Column 3: Chicago HQ */}
         <div className="footer-col flex flex-col gap-6">
           <div>
-            <h4 className="text-sm md:text-base mb-3">Chicago - HQ</h4>
-            <div className="flex flex-col gap-1 text-xs md:text-sm tracking-widest uppercase font-mono">
+            <h4 className="text-xs md:text-sm font-semibold mb-3">Chicago - HQ</h4>
+            <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <p>444 W LAKE STREET</p>
               <p>SUITE 1700</p>
               <p>CHICAGO, IL 60606</p>
               <p>UNITED STATES</p>
             </div>
           </div>
+        </div>
+
+        {/* Column 4: Houston */}
+        <div className="footer-col flex flex-col gap-6">
           <div>
-            <h4 className="text-sm md:text-base mb-3">Houston</h4>
-            <div className="flex flex-col gap-1 text-xs md:text-sm tracking-widest uppercase font-mono">
+            <h4 className="text-xs md:text-sm font-semibold mb-3">Houston</h4>
+            <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <p>HOUSTON, TEXAS</p>
               <p>UNITED STATES</p>
             </div>
           </div>
         </div>
 
-        {/* Column 4: Locations 2 */}
+        {/* Column 5: Lagos - Lekki */}
         <div className="footer-col flex flex-col gap-6">
           <div>
-            <h4 className="text-sm md:text-base mb-3">Lagos - Lekki</h4>
-            <div className="flex flex-col gap-1 text-xs md:text-sm tracking-widest uppercase font-mono">
+            <h4 className="text-xs md:text-sm font-semibold mb-3">Lagos - Lekki</h4>
+            <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <p>LEKKI OFFICE</p>
               <p>LAGOS, NIGERIA</p>
             </div>
           </div>
+        </div>
+
+        {/* Column 6: Lagos - Ikeja */}
+        <div className="footer-col flex flex-col gap-6">
           <div>
-            <h4 className="text-sm md:text-base mb-3">Lagos - Ikeja</h4>
-            <div className="flex flex-col gap-1 text-xs md:text-sm tracking-widest uppercase font-mono">
+            <h4 className="text-xs md:text-sm font-semibold mb-3">Lagos - Ikeja</h4>
+            <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <p>IKEJA OFFICE</p>
               <p>LAGOS, NIGERIA</p>
             </div>
