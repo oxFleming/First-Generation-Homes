@@ -14,13 +14,13 @@ import { Footer } from './components/Footer';
 gsap.registerPlugin(ScrollTrigger);
 
 const navItems = [
-  { id: 'agency', label: 'Agency' },
-  { id: 'achievements', label: 'Achievements' },
-  { id: 'immersion', label: 'Immersion' },
-  { id: 'contact', label: 'Contact' },
-  { id: 'news', label: 'News' },
-  { id: 'networks', label: 'Networks' },
-  { id: 'fr', label: 'FR' }
+  { id: 'home', label: 'Home' },
+  { id: 'who-we-are', label: 'Who we are' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'what-we-do', label: 'What we do' },
+  { id: 'testimonials', label: 'Testimonials' },
+  { id: 'team', label: 'Meet Our Team' },
+  { id: 'contact', label: 'Contact us' }
 ];
 
 const heroImages = [
@@ -34,17 +34,36 @@ const heroImages = [
   'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=2070&auto=format&fit=crop'
 ];
 
-const interiorProjects = [
-  { id: 1, src: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop', title: 'Modern Living Room', location: 'Chicago, IL' },
-  { id: 2, src: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1000&auto=format&fit=crop', title: 'Minimalist Kitchen', location: 'Evanston, IL' },
-  { id: 3, src: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=1000&auto=format&fit=crop', title: 'Luxury Bedroom', location: 'Oak Brook, IL' },
-  { id: 4, src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop', title: 'Open Concept Dining', location: 'Naperville, IL' },
-  { id: 5, src: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=1000&auto=format&fit=crop', title: 'Contemporary Bathroom', location: 'Chicago, IL' },
-  { id: 6, src: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=1000&auto=format&fit=crop', title: 'Cozy Study', location: 'Winnetka, IL' },
-  { id: 7, src: 'https://images.unsplash.com/photo-1613490908676-430489d2d1b7?q=80&w=1000&auto=format&fit=crop', title: 'Sunroom', location: 'Highland Park, IL' },
-  { id: 8, src: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop', title: 'Home Theater', location: 'Lake Forest, IL' },
-  { id: 9, src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop', title: 'Wine Cellar', location: 'Glencoe, IL' },
-  { id: 10, src: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=1000&auto=format&fit=crop', title: 'Guest Suite', location: 'Hinsdale, IL' }
+const customResidentialProjects = [
+  { id: 1, src: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1000&auto=format&fit=crop', title: 'Architectural Design', location: 'Chicago, IL' },
+  { id: 2, src: 'https://images.unsplash.com/photo-1590386184852-32a8b3036611?q=80&w=1000&auto=format&fit=crop', title: 'Structural Construction', location: 'Evanston, IL' },
+  { id: 3, src: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1000&auto=format&fit=crop', title: 'Interior Finishing', location: 'Oak Brook, IL' },
+  { id: 4, src: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop', title: 'Landscaping Integration', location: 'Naperville, IL' },
+  { id: 5, src: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop', title: 'Custom Home', location: 'Chicago, IL' }
+];
+
+const homeRenovationProjects = [
+  { id: 6, src: 'https://images.unsplash.com/photo-1556910103-1c02745a872f?q=80&w=1000&auto=format&fit=crop', title: 'Kitchen Remodels', location: 'Winnetka, IL' },
+  { id: 7, src: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1000&auto=format&fit=crop', title: 'Bathroom Renovations', location: 'Highland Park, IL' },
+  { id: 8, src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop', title: 'Structural Upgrades', location: 'Lake Forest, IL' },
+  { id: 9, src: 'https://images.unsplash.com/photo-1600210491369-e753d80a41f3?q=80&w=1000&auto=format&fit=crop', title: 'Interior Redesign', location: 'Glencoe, IL' },
+  { id: 10, src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop', title: 'Exterior Modernization', location: 'Hinsdale, IL' }
+];
+
+const buildingDevelopmentProjects = [
+  { id: 11, src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop', title: 'Development Planning', location: 'Chicago, IL' },
+  { id: 12, src: 'https://images.unsplash.com/photo-1541888086925-0c13d4f47c54?q=80&w=1000&auto=format&fit=crop', title: 'Building Construction', location: 'Evanston, IL' },
+  { id: 13, src: 'https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1000&auto=format&fit=crop', title: 'Project Management', location: 'Oak Brook, IL' },
+  { id: 14, src: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop', title: 'Development Consulting', location: 'Naperville, IL' },
+  { id: 15, src: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1000&auto=format&fit=crop', title: 'Real Estate Projects', location: 'Chicago, IL' }
+];
+
+const constructionMaterialsProjects = [
+  { id: 16, src: 'https://images.unsplash.com/photo-1523413363574-c30aa1c2a516?q=80&w=1000&auto=format&fit=crop', title: 'Tile Products', location: 'Winnetka, IL' },
+  { id: 17, src: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?q=80&w=1000&auto=format&fit=crop', title: 'Wood Flooring', location: 'Highland Park, IL' },
+  { id: 18, src: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=1000&auto=format&fit=crop', title: 'Kitchen Fixtures', location: 'Lake Forest, IL' },
+  { id: 19, src: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1000&auto=format&fit=crop', title: 'Bathroom Installations', location: 'Glencoe, IL' },
+  { id: 20, src: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1000&auto=format&fit=crop', title: 'Interior Finishing', location: 'Hinsdale, IL' }
 ];
 
 const categories = [
@@ -52,21 +71,25 @@ const categories = [
     id: 'custom-residential',
     title: 'Custom Residential Construction',
     subtitle: "ARCHITECTURAL DESIGN<br />STRUCTURAL CONSTRUCTION<br />INTERIOR FINISHING<br />LANDSCAPING INTEGRATION",
+    projects: customResidentialProjects
   },
   {
     id: 'home-renovation',
     title: 'Home Renovation & Property Modernization',
     subtitle: "KITCHEN REMODELS<br />BATHROOM RENOVATIONS<br />STRUCTURAL UPGRADES<br />INTERIOR REDESIGN<br />EXTERIOR MODERNIZATION",
+    projects: homeRenovationProjects
   },
   {
     id: 'building-development',
     title: 'Building Development & Real Estate Projects',
     subtitle: "DEVELOPMENT PLANNING<br />BUILDING CONSTRUCTION<br />PROJECT MANAGEMENT<br />DEVELOPMENT CONSULTING<br />MATERIAL PROCUREMENT",
+    projects: buildingDevelopmentProjects
   },
   {
     id: 'construction-materials',
     title: 'Construction Materials & Finishing Products',
     subtitle: "TILE PRODUCTS<br />WOOD FLOORING<br />KITCHEN FIXTURES<br />BATHROOM INSTALLATIONS<br />INTERIOR FINISHING",
+    projects: constructionMaterialsProjects
   }
 ];
 
@@ -204,6 +227,15 @@ export default function App() {
   const { scrollY } = useScroll();
   const smoothScrollY = useSpring(scrollY, { damping: 25, stiffness: 100, mass: 0.5 });
   const backgroundY = useTransform(smoothScrollY, [0, 1000], ['0%', '30%']);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element && lenisInstance) {
+      lenisInstance.scrollTo(element, { offset: 0, duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    } else if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   // Intro shuffle effect
   useEffect(() => {
@@ -395,7 +427,7 @@ export default function App() {
   return (
     <div ref={mainRef} className="min-h-[150vh] bg-[#f5f5f5] font-sans overflow-x-hidden w-full">
       {/* Hero Section */}
-      <div ref={containerRef} className="relative w-full h-[85vh] bg-white text-white" data-theme="dark">
+      <div id="home" ref={containerRef} className="relative w-full h-[85vh] bg-white text-white" data-theme="dark">
         {/* Background Container */}
         <div 
           ref={bgContainerRef}
@@ -464,7 +496,8 @@ export default function App() {
                 <div 
                   key={item.id}
                   className="cursor-pointer flex items-center gap-2 group py-2"
-                  onMouseEnter={() => setActiveIndex(index)}
+                  onMouseEnter={() => setActiveIndex(index % heroImages.length)}
+                  onClick={() => scrollToSection(item.id)}
                 >
                   <div className="relative flex items-center justify-center w-5 h-5">
                     <span className={`absolute inset-0 transition-transform duration-300 ease-out scale-0 group-hover:scale-100 ${navTheme === 'dark' ? 'bg-white' : 'bg-black'}`} />
@@ -516,7 +549,7 @@ export default function App() {
       </div>
       
       {/* About Us Section */}
-      <div className="w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
+      <div id="who-we-are" className="w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
         <div className="max-w-[1400px] mx-auto">
           {/* Title */}
           <h2 className="about-text text-6xl md:text-7xl lg:text-[90px] font-serif tracking-tight text-gray-900 mb-8 ml-0 md:ml-[5%]">
@@ -551,7 +584,7 @@ export default function App() {
                 <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Envision</span>
               </div>
               <div className="w-full md:w-[70%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop" alt="Envision" className="w-full aspect-[4/3] object-cover" />
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop" alt="Envision" className="w-full aspect-[4/3] object-cover" />
               </div>
             </div>
 
@@ -561,7 +594,7 @@ export default function App() {
                 <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Design</span>
               </div>
               <div className="w-full md:w-[75%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=1200&auto=format&fit=crop" alt="Design" className="w-full aspect-[16/10] object-cover" />
+                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" alt="Design" className="w-full aspect-[16/10] object-cover" />
               </div>
             </div>
 
@@ -569,7 +602,7 @@ export default function App() {
             <div className="flex flex-col md:flex-row items-start w-full md:w-[95%] lg:w-[90%] md:ml-[2%] md:-mt-16 lg:-mt-24 relative z-30 gap-12 md:gap-16 lg:gap-24">
               <div className="w-full md:w-[50%] flex flex-col">
                 <div className="img-container overflow-hidden mb-6 shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop" alt="Build" className="w-full aspect-[4/3] object-cover" />
+                  <img src="https://images.unsplash.com/photo-1541888086925-0c13d4f47c54?q=80&w=1200&auto=format&fit=crop" alt="Build" className="w-full aspect-[4/3] object-cover" />
                 </div>
                 <div className="flex justify-start md:pl-8">
                   <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Build</span>
@@ -592,7 +625,7 @@ export default function App() {
       </div>
 
       {/* Featured Projects Section */}
-      <div data-theme="dark">
+      <div id="projects" data-theme="dark">
         <FeaturedProjects />
       </div>
 
@@ -600,30 +633,30 @@ export default function App() {
       <ValuesSection />
 
       {/* Portfolio Sections */}
-      <div className="bg-[#c1bdae] pb-16 md:pb-24" data-theme="light">
+      <div id="what-we-do" className="bg-[#c1bdae] pb-16 md:pb-24" data-theme="light">
         {categories.map((category) => (
           <PortfolioCategory 
             key={category.id}
             title={category.title}
             subtitle={category.subtitle}
-            projects={interiorProjects} // Reusing the same images for demonstration
+            projects={category.projects}
             onProjectClick={setSelectedProject}
           />
         ))}
       </div>
 
       {/* Testimonials Section */}
-      <div data-theme="dark">
+      <div id="testimonials" data-theme="dark">
         <Testimonials />
       </div>
 
       {/* Team Section */}
-      <div data-theme="dark">
+      <div id="team" data-theme="dark">
         <TeamSection />
       </div>
 
       {/* Footer Section */}
-      <div data-theme="light">
+      <div id="contact" data-theme="light">
         <Footer />
       </div>
 
