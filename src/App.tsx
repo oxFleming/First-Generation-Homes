@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring } from 'framer-motion';
 import { Plus, Minus, ArrowUpRight, X } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+import { FeaturedProjects } from './components/FeaturedProjects';
+import { ValuesSection } from './components/ValuesSection';
+import { Testimonials } from './components/Testimonials';
+import { TeamSection } from './components/TeamSection';
+import { Footer } from './components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -66,52 +72,67 @@ const categories = [
 
 function PortfolioCategory({ title, subtitle, projects, onProjectClick }: { title: string, subtitle: string, projects: any[], onProjectClick: (project: any) => void }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const catRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.fromTo('.cat-line', 
+      { scaleX: 0 },
+      {
+        scaleX: 1,
+        duration: 1.5,
+        ease: 'expo.inOut',
+        scrollTrigger: {
+          trigger: catRef.current,
+          start: 'top 90%',
+        }
+      }
+    );
+
+    gsap.fromTo('.cat-text',
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: catRef.current,
+          start: 'top 85%',
+        }
+      }
+    );
+  }, { scope: catRef });
 
   return (
-    <div className="w-full bg-[#c1bdae] text-black pt-8 md:pt-12 pb-16 md:pb-24 px-4 md:px-8 overflow-hidden">
+    <div ref={catRef} className="w-full bg-[#c1bdae] text-black pt-4 md:pt-6 pb-8 md:pb-12 px-4 md:px-8 overflow-hidden">
       <div className="max-w-[1800px] mx-auto">
         {/* End-to-end line */}
-        <motion.div 
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full h-[1px] bg-black/30 mb-6 md:mb-8 origin-left"
-        />
+        <div className="cat-line w-full h-[1px] bg-black/30 mb-4 md:mb-6 origin-left" />
 
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-0">
           
           {/* Left Sidebar */}
-          <div className="w-full lg:w-[20%] flex flex-col">
+          <div 
+            className="w-full lg:w-[20%] flex flex-col group cursor-pointer"
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
             <div className="flex items-start gap-4 md:gap-8">
               {/* Plus Button */}
-              <motion.button 
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="text-black flex items-center justify-center shrink-0 hover:text-gray-600 transition-colors mt-0.5"
-              >
-                {isExpanded ? <Minus size={20} strokeWidth={1} /> : <Plus size={20} strokeWidth={1} />}
-              </motion.button>
+              <div className="cat-text flex items-center justify-center shrink-0 mt-0.5 w-6 h-6 transition-colors duration-300 group-hover:bg-black group-hover:text-white text-black">
+                {isExpanded ? <Minus size={16} strokeWidth={1.5} /> : <Plus size={16} strokeWidth={1.5} />}
+              </div>
 
               {/* Text Content */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-                className="flex flex-col"
-              >
-                <h3 className="text-base md:text-lg font-sans text-gray-900 mt-0.5">
+              <div className="flex flex-col">
+                <h3 className="cat-text text-[10px] md:text-xs font-sans font-bold text-gray-900 mt-1 uppercase tracking-widest">
                   {title}
                 </h3>
                 <p 
-                  className="text-[10px] md:text-[11px] text-gray-800 uppercase tracking-[0.15em] leading-[1.8] mt-16 md:mt-24 max-w-[250px]"
+                  className="cat-text text-[10px] md:text-[11px] text-gray-800 uppercase tracking-[0.15em] leading-[1.8] mt-16 md:mt-24 max-w-[250px]"
                   dangerouslySetInnerHTML={{ __html: subtitle }}
                 />
-              </motion.div>
+              </div>
             </div>
           </div>
 
@@ -122,27 +143,30 @@ function PortfolioCategory({ title, subtitle, projects, onProjectClick }: { titl
                 {(isExpanded ? projects : projects.slice(0, 5)).map((project, index) => (
                   <motion.div
                     layout
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    exit={{ scale: 0, opacity: 0, transition: { duration: 0.3 } }}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ 
-                      duration: 0.8, 
-                      ease: [0.22, 1, 0.36, 1], 
-                      delay: (index % 5) * 0.1 
+                      duration: 1.2, 
+                      ease: [0.16, 1, 0.3, 1], 
+                      delay: (index % 5) * 0.08 
                     }}
                     key={project.id}
-                    className="group cursor-pointer flex flex-col origin-center"
-                    onClick={() => onProjectClick(project)}
+                    className="group/item cursor-pointer flex flex-col origin-center"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onProjectClick(project);
+                    }}
                   >
                     <div className="relative w-full aspect-[3/4] overflow-hidden bg-gray-200">
                       <img 
                         src={project.src} 
                         alt={project.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-1000 ease-[0.16,1,0.3,1] group-hover/item:scale-105"
                       />
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <div className="w-8 h-8 bg-white text-black flex items-center justify-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/item:opacity-100 transition-opacity duration-500 ease-[0.16,1,0.3,1] flex items-center justify-center">
+                        <div className="w-8 h-8 bg-white text-black flex items-center justify-center transform translate-y-4 group-hover/item:translate-y-0 transition-transform duration-500 ease-[0.16,1,0.3,1]">
                           <ArrowUpRight size={18} strokeWidth={1.5} />
                         </div>
                       </div>
@@ -163,44 +187,26 @@ export default function App() {
   const [shuffleIndex, setShuffleIndex] = useState(0);
   const [introFinished, setIntroFinished] = useState(false);
   const [selectedProject, setSelectedProject] = useState<{id: number, src: string, title: string, location: string} | null>(null);
-  const [isSticky, setIsSticky] = useState(false);
-  const [navTop, setNavTop] = useState(0);
   
+  const mainRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const bgContainerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLDivElement>(null);
   const bottomTextRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
+  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
+
   const { scrollY } = useScroll();
-  const backgroundY = useTransform(scrollY, [0, 1000], ['0%', '30%']);
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    if (navTop > 0 && latest >= navTop) {
-      setIsSticky(true);
-    } else {
-      setIsSticky(false);
-    }
-  });
-
-  useEffect(() => {
-    // Measure nav position after a short delay to ensure layout is complete
-    const timer = setTimeout(() => {
-      if (navRef.current) {
-        const rect = navRef.current.getBoundingClientRect();
-        setNavTop(rect.top + window.scrollY);
-      }
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [introFinished]);
+  const smoothScrollY = useSpring(scrollY, { damping: 25, stiffness: 100, mass: 0.5 });
+  const backgroundY = useTransform(smoothScrollY, [0, 1000], ['0%', '30%']);
 
   // Intro shuffle effect
   useEffect(() => {
     let count = 0;
-    const maxShuffles = 15;
+    const maxShuffles = 8;
     const interval = setInterval(() => {
       setShuffleIndex((prev) => (prev + 1) % heroImages.length);
       count++;
@@ -209,7 +215,7 @@ export default function App() {
         setShuffleIndex(0); // Settle on the first image
         if (tlRef.current) tlRef.current.play();
       }
-    }, 100);
+    }, 60);
     return () => clearInterval(interval);
   }, []);
 
@@ -222,15 +228,56 @@ export default function App() {
     return () => clearInterval(interval);
   }, [introFinished, activeIndex]);
 
+  // Smooth scrolling with Lenis
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.08,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    setLenisInstance(lenis);
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove((time) => {
+        lenis.raf(time * 1000);
+      });
+    };
+  }, []);
+
+  // Prevent scrolling during intro
+  useEffect(() => {
+    if (!introFinished) {
+      document.body.style.overflow = 'hidden';
+      if (lenisInstance) lenisInstance.stop();
+    } else {
+      document.body.style.overflow = '';
+      if (lenisInstance) lenisInstance.start();
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [introFinished, lenisInstance]);
+
   useGSAP(() => {
     // Initial states
     gsap.set(bgContainerRef.current, { 
-      clipPath: 'polygon(35% 47%, 65% 47%, 65% 71%, 35% 71%)', // Centered vertically relative to 100vh viewport, inside the 85vh container
-      opacity: 0 // Start invisible, fade in quickly
+      clipPath: 'polygon(35% 47%, 65% 47%, 65% 71%, 35% 71%)',
+      opacity: 0
     });
     gsap.set(titleRef.current, { color: '#000000' });
     gsap.set(lineRef.current, { backgroundColor: 'rgba(0,0,0,0.3)' });
-    gsap.set([navRef.current, bottomTextRef.current, previewRef.current], { opacity: 0, y: 20 });
+    gsap.set([bottomTextRef.current, previewRef.current], { opacity: 0, y: 20 });
 
     tlRef.current = gsap.timeline({ 
       paused: true, 
@@ -238,35 +285,113 @@ export default function App() {
     });
 
     // Fade in the small image container at the very beginning
-    gsap.to(bgContainerRef.current, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+    gsap.to(bgContainerRef.current, { opacity: 1, duration: 0.4, ease: 'power2.inOut' });
 
     // The main expansion timeline (played after shuffle)
     tlRef.current
       .to(bgContainerRef.current, {
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-        duration: 1.2,
-        ease: 'power3.inOut'
+        duration: 1.0,
+        ease: 'expo.inOut'
       })
       .to(titleRef.current, {
         color: '#ffffff',
-        duration: 0.5
-      }, '-=0.8')
+        duration: 0.6,
+        ease: 'power2.inOut'
+      }, '-=0.6')
       .to(lineRef.current, {
         backgroundColor: 'rgba(255,255,255,0.3)',
-        duration: 0.5
-      }, '-=0.8')
-      .to([navRef.current, bottomTextRef.current, previewRef.current], {
+        duration: 0.6,
+        ease: 'power2.inOut'
+      }, '-=0.6')
+      .to([bottomTextRef.current, previewRef.current], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0.1,
-        ease: 'power2.out'
+        ease: 'expo.out'
       }, '-=0.4');
 
-  }, { scope: containerRef });
+    // ScrollTrigger Animations for About Section
+    const aboutTexts = gsap.utils.toArray('.about-text');
+    aboutTexts.forEach((text: any) => {
+      gsap.fromTo(text,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: text,
+            start: 'top 85%',
+          }
+        }
+      );
+    });
+
+    // Image Parallax and Reveal
+    const imgContainers = gsap.utils.toArray('.img-container');
+    imgContainers.forEach((container: any) => {
+      const img = container.querySelector('img');
+      
+      // Reveal
+      gsap.fromTo(container,
+        { y: 100, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 85%',
+          }
+        }
+      );
+
+      // Parallax
+      gsap.fromTo(img,
+        { scale: 1.2, yPercent: -10 },
+        {
+          scale: 1,
+          yPercent: 10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: container,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5
+          }
+        }
+      );
+    });
+
+  }, { scope: mainRef });
 
   return (
-    <div className="min-h-[150vh] bg-[#f5f5f5] font-sans">
+    <div ref={mainRef} className="min-h-[150vh] bg-[#f5f5f5] font-sans overflow-x-hidden w-full">
+      {/* Sticky Nav */}
+      <nav 
+        className="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-12 py-6 mix-blend-difference text-white flex flex-wrap justify-between items-center w-full gap-y-4 transition-all duration-300 pointer-events-auto"
+      >
+        {navItems.map((item, index) => (
+          <div 
+            key={item.id}
+            className="cursor-pointer flex items-center gap-2 group py-2"
+            onMouseEnter={() => setActiveIndex(index)}
+          >
+            <div className="relative flex items-center justify-center w-5 h-5">
+              <span className="absolute inset-0 bg-white transition-transform duration-300 ease-out scale-0 group-hover:scale-100" />
+              <span className="relative font-light text-lg leading-none transition-all duration-300 opacity-60 group-hover:opacity-100 group-hover:text-black">+</span>
+            </div>
+            <span className={`text-[10px] md:text-xs uppercase tracking-[0.2em] font-medium transition-opacity duration-300 ${activeIndex === index ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}`}>
+              {item.label}
+            </span>
+          </div>
+        ))}
+      </nav>
+
       {/* Hero Section */}
       <div ref={containerRef} className="relative w-full h-[85vh] bg-white text-white">
         {/* Background Container */}
@@ -306,7 +431,7 @@ export default function App() {
         </div>
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex flex-col justify-between h-full px-6 md:px-10 lg:px-12 pt-4 md:pt-6 lg:pt-8 pb-12 md:pb-16 pointer-events-none">
+        <div className="relative z-10 flex flex-col justify-between h-full px-6 md:px-10 lg:px-12 pt-4 md:pt-6 lg:pt-8 pb-8 md:pb-12 pointer-events-none">
           
           {/* Top Section */}
           <div className="w-full pointer-events-auto">
@@ -325,30 +450,6 @@ export default function App() {
               ref={lineRef}
               className="w-full h-[1px] mb-4"
             />
-
-            {/* Nav Wrapper to maintain layout when nav becomes fixed */}
-            <div ref={navRef} className="w-full h-[40px]">
-              <nav 
-                className={`flex flex-wrap justify-between items-center w-full gap-y-4 text-sm md:text-base font-medium tracking-wider transition-all duration-300 ${
-                  isSticky 
-                    ? 'fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-12 py-4 bg-black/90 backdrop-blur-md shadow-lg' 
-                    : 'relative'
-                }`}
-              >
-                {navItems.map((item, index) => (
-                  <div 
-                    key={item.id}
-                    className="cursor-pointer flex items-center gap-2 group py-2"
-                    onMouseEnter={() => setActiveIndex(index)}
-                  >
-                    <span className="text-white/60 font-light text-lg leading-none mb-0.5">+</span>
-                    <span className={`transition-colors duration-300 ${activeIndex === index ? 'text-white' : 'text-white/80 group-hover:text-white'}`}>
-                      {item.label}
-                    </span>
-                  </div>
-                ))}
-              </nav>
-            </div>
           </div>
 
           {/* Bottom Section */}
@@ -357,7 +458,7 @@ export default function App() {
             className="flex justify-between items-end w-full pointer-events-auto"
           >
             {/* Left Text */}
-            <div className="max-w-xl text-2xl md:text-3xl lg:text-[32px] leading-[1.2] font-normal tracking-tight">
+            <div className="max-w-lg text-lg md:text-xl lg:text-2xl leading-[1.3] font-normal tracking-tight">
               OUR agency architecture designs<br />
               of the residences exceptional In of the<br />
               places rare, in France And In THE world.
@@ -369,7 +470,7 @@ export default function App() {
         <div className="absolute right-4 md:right-16 lg:right-32 bottom-0 translate-y-[30%] hidden sm:block z-20 pointer-events-auto">
           <div 
             ref={previewRef}
-            className="w-[280px] h-[180px] md:w-[500px] md:h-[320px] overflow-hidden cursor-pointer transition-all duration-300 relative"
+            className="w-[200px] h-[130px] md:w-[350px] md:h-[220px] overflow-hidden cursor-pointer transition-all duration-300 relative"
             onClick={() => setActiveIndex((current) => (current + 1) % heroImages.length)}
           >
             <AnimatePresence initial={false}>
@@ -392,26 +493,26 @@ export default function App() {
       <div className="w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden">
         <div className="max-w-[1400px] mx-auto">
           {/* Title */}
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif tracking-tight text-gray-900 mb-8 ml-0 md:ml-[5%]">
+          <h2 className="about-text text-6xl md:text-7xl lg:text-[90px] font-cormorant font-light tracking-tight text-gray-900 mb-8 ml-0 md:ml-[5%]">
             Who we are...
           </h2>
 
           {/* New Text Content directly under the header */}
-          <div className="ml-0 md:ml-[5%] max-w-4xl mb-16 md:mb-20">
-            <p className="text-lg md:text-xl leading-[1.8] font-light text-gray-800 mb-6">
+          <div className="ml-0 md:ml-[25%] lg:ml-[30%] max-w-4xl mb-16 md:mb-24">
+            <p className="about-text text-xl md:text-[22px] leading-[1.6] font-sans font-normal text-gray-900 mb-6">
               First Generation Homes LLC is a U.S.-based real estate development and construction company headquartered in Chicago, Illinois. The company focuses on residential construction, renovation, and development projects while also supporting international real estate initiatives.
             </p>
-            <p className="text-lg md:text-xl leading-[1.8] font-light text-gray-800 mb-6">
+            <p className="about-text text-xl md:text-[22px] leading-[1.6] font-sans font-normal text-gray-900 mb-6">
               The firm operates as part of the broader FGIP ecosystem and contributes strategic expertise in design, construction management, finishing products, and residential development planning.
             </p>
-            <p className="text-lg md:text-xl leading-[1.8] font-light text-gray-800">
+            <p className="about-text text-xl md:text-[22px] leading-[1.6] font-sans font-normal text-gray-900">
               The company’s operations combine construction services, custom home development, and building renovation, delivering high-quality residential environments tailored to modern lifestyle and market demands.
             </p>
           </div>
 
           {/* Intro to Images Header */}
           <div className="w-full flex justify-end md:pr-[5%] mb-16 md:mb-24">
-            <h3 className="text-4xl md:text-5xl lg:text-6xl font-serif tracking-tight text-gray-900">
+            <h3 className="about-text text-4xl md:text-5xl lg:text-6xl font-serif tracking-tight text-gray-900">
               At FGH LLC
             </h3>
           </div>
@@ -421,34 +522,36 @@ export default function App() {
             {/* WE ENVISION */}
             <div className="flex flex-col md:flex-row items-start md:items-center w-full md:w-[75%] lg:w-[65%] md:ml-[5%] relative z-10">
               <div className="w-full md:w-[30%] mb-4 md:mb-0 md:pr-8 flex justify-start md:justify-end">
-                <span className="text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Envision</span>
+                <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Envision</span>
               </div>
-              <div className="w-full md:w-[70%]">
-                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop" alt="Envision" className="w-full aspect-[4/3] object-cover shadow-xl" />
+              <div className="w-full md:w-[70%] img-container overflow-hidden shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop" alt="Envision" className="w-full aspect-[4/3] object-cover" />
               </div>
             </div>
 
             {/* WE DESIGN */}
             <div className="flex flex-col md:flex-row-reverse items-start md:items-center w-full md:w-[85%] lg:w-[75%] md:ml-auto md:-mt-24 lg:-mt-32 relative z-20">
               <div className="w-full md:w-[25%] mt-4 md:mt-0 md:pl-8 flex justify-start">
-                <span className="text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Design</span>
+                <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Design</span>
               </div>
-              <div className="w-full md:w-[75%]">
-                <img src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=1200&auto=format&fit=crop" alt="Design" className="w-full aspect-[16/10] object-cover shadow-2xl" />
+              <div className="w-full md:w-[75%] img-container overflow-hidden shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=1200&auto=format&fit=crop" alt="Design" className="w-full aspect-[16/10] object-cover" />
               </div>
             </div>
 
             {/* WE BUILD & TEXT */}
             <div className="flex flex-col md:flex-row items-start w-full md:w-[95%] lg:w-[90%] md:ml-[2%] md:-mt-16 lg:-mt-24 relative z-30 gap-12 md:gap-16 lg:gap-24">
               <div className="w-full md:w-[50%] flex flex-col">
-                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop" alt="Build" className="w-full aspect-[4/3] object-cover shadow-xl mb-6" />
+                <div className="img-container overflow-hidden mb-6 shadow-2xl">
+                  <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop" alt="Build" className="w-full aspect-[4/3] object-cover" />
+                </div>
                 <div className="flex justify-start md:pl-8">
-                  <span className="text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Build</span>
+                  <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Build</span>
                 </div>
               </div>
               
               <div className="w-full md:w-[50%] md:pt-24 lg:pt-32">
-                <p className="text-lg md:text-xl lg:text-[22px] leading-[1.8] font-light text-gray-800">
+                <p className="about-text text-lg md:text-xl lg:text-[22px] leading-[1.8] font-light text-gray-800">
                   We bridge the gap between visionary architecture and flawless on-site execution through meticulous craftsmanship and transparent project management.
                   <br/><br/>
                   Driven by an uncompromising standard of quality, we seamlessly transform complex blueprints into architectural masterpieces.
@@ -462,6 +565,12 @@ export default function App() {
         </div>
       </div>
 
+      {/* Featured Projects Section */}
+      <FeaturedProjects />
+
+      {/* Values Section */}
+      <ValuesSection />
+
       {/* Portfolio Sections */}
       <div className="bg-[#c1bdae] pb-16 md:pb-24">
         {categories.map((category) => (
@@ -474,6 +583,15 @@ export default function App() {
           />
         ))}
       </div>
+
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* Team Section */}
+      <TeamSection />
+
+      {/* Footer Section */}
+      <Footer />
 
       {/* Project Modal */}
       <AnimatePresence>
