@@ -94,8 +94,8 @@ export const TeamSection = () => {
             key={member.id} 
             className="w-[85vw] md:w-[60vw] lg:w-[50vw] h-full flex items-center justify-center px-4 md:px-12 flex-shrink-0"
           >
-            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 w-full">
-              <div className="w-full md:w-1/2 aspect-[4/5] overflow-hidden rounded-2xl relative group">
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12 w-full max-h-[85vh]">
+              <div className="w-full md:w-[45%] aspect-square md:aspect-[4/5] max-h-[45vh] md:max-h-[60vh] overflow-hidden rounded-2xl relative group shrink-0">
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
                 <img 
                   src={member.image} 
@@ -104,17 +104,17 @@ export const TeamSection = () => {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="w-full md:w-1/2 text-white">
-                <div className="text-[#c1bdae] font-mono text-sm mb-4 tracking-widest uppercase">
+              <div className="w-full md:w-[55%] text-white flex flex-col justify-center">
+                <div className="text-[#c1bdae] font-mono text-xs md:text-sm mb-2 md:mb-4 tracking-widest uppercase">
                   0{index + 1} / 0{teamMembers.length}
                 </div>
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-4 leading-tight">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif mb-2 md:mb-4 leading-tight">
                   {member.name}
                 </h3>
-                <p className="text-lg md:text-xl text-[#c1bdae] mb-6 font-light">
+                <p className="text-sm md:text-lg text-[#c1bdae] mb-3 md:mb-6 font-light">
                   {member.role}
                 </p>
-                <p className="text-base md:text-lg text-gray-400 leading-relaxed font-light">
+                <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light line-clamp-4 md:line-clamp-none">
                   {member.description}
                 </p>
               </div>
