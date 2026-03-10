@@ -524,7 +524,7 @@ export default function App() {
           </h2>
 
           {/* New Text Content directly under the header */}
-          <div className="ml-0 md:ml-[25%] lg:ml-[30%] max-w-4xl mb-16 md:mb-24">
+          <div className="ml-0 md:ml-[16%] lg:ml-[20%] max-w-4xl mb-16 md:mb-24">
             <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800 mb-6">
               First Generation Homes LLC is a U.S.-based real estate development and construction company headquartered in Chicago, Illinois. The company focuses on residential construction, renovation, and development projects while also supporting international real estate initiatives.
             </p>
