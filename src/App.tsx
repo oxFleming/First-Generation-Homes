@@ -525,13 +525,13 @@ export default function App() {
 
           {/* New Text Content directly under the header */}
           <div className="ml-0 md:ml-[25%] lg:ml-[30%] max-w-4xl mb-16 md:mb-24">
-            <p className="about-text text-xl md:text-[22px] leading-[1.6] font-sans font-light text-gray-800 mb-6">
+            <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800 mb-6">
               First Generation Homes LLC is a U.S.-based real estate development and construction company headquartered in Chicago, Illinois. The company focuses on residential construction, renovation, and development projects while also supporting international real estate initiatives.
             </p>
-            <p className="about-text text-xl md:text-[22px] leading-[1.6] font-sans font-light text-gray-800 mb-6">
+            <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800 mb-6">
               The firm operates as part of the broader FGIP ecosystem and contributes strategic expertise in design, construction management, finishing products, and residential development planning.
             </p>
-            <p className="about-text text-xl md:text-[22px] leading-[1.6] font-sans font-light text-gray-800">
+            <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800">
               The company’s operations combine construction services, custom home development, and building renovation, delivering high-quality residential environments tailored to modern lifestyle and market demands.
             </p>
           </div>
@@ -577,7 +577,7 @@ export default function App() {
               </div>
               
               <div className="w-full md:w-[50%] md:pt-24 lg:pt-32">
-                <p className="about-text text-xl md:text-[22px] leading-[1.6] font-sans font-light text-gray-800">
+                <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800">
                   We bridge the gap between visionary architecture and flawless on-site execution through meticulous craftsmanship and transparent project management.
                   <br/><br/>
                   Driven by an uncompromising standard of quality, we seamlessly transform complex blueprints into architectural masterpieces.

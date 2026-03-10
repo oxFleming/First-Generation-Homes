@@ -28,7 +28,7 @@ export function ValuesSection() {
       {/* Blending Section */}
       <section className="w-full bg-[#c1bdae] px-6 md:px-12 py-16 md:py-24 text-[#1a1a1a]" data-theme="light">
         <div className="max-w-7xl mx-auto">
-          <p className="text-2xl md:text-3xl lg:text-4xl font-sans font-light leading-tight max-w-4xl mb-12">
+          <p className="text-xl md:text-2xl lg:text-3xl font-sans font-light leading-tight max-w-4xl mb-12">
             From transparent communication to flawless execution, we are committed to building absolute trust alongside every legacy home we deliver.
           </p>
           

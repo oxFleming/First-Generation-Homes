@@ -63,7 +63,7 @@ export const Testimonials = () => {
               <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-white/10 p-6 md:p-8 rounded-3xl h-full flex flex-col">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
                 
-                <p className="text-base md:text-lg text-zinc-300 leading-relaxed mb-6 flex-grow font-sans font-light">
+                <p className="text-sm md:text-[15px] text-zinc-300 leading-relaxed mb-6 flex-grow font-sans font-light">
                   "{testimonial.text}"
                 </p>
                 
