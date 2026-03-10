@@ -28,14 +28,14 @@ export function FeaturedProjects() {
   const activeProject = projectList[activeIndex];
 
   return (
-    <div className="bg-white text-black py-24 lg:py-32 relative overflow-hidden">
-      <div className="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div className="bg-white text-black py-16 lg:py-24 relative overflow-hidden">
+      <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Beige Box */}
-        <div className="bg-[#f5efe6] relative w-full lg:w-[80%] mx-auto pt-16 pb-16 lg:pt-28 lg:pb-28 px-6 sm:px-12 lg:px-20">
+        <div className="bg-[#f5efe6] relative w-full lg:w-[80%] mx-auto pt-12 pb-12 lg:pt-20 lg:pb-20 px-6 sm:px-10 lg:px-16">
           
           {/* Top Section */}
-          <div className="flex flex-col lg:flex-row items-start mb-32 flex-nowrap">
-            <div className="w-full lg:w-[45%] flex flex-col justify-center shrink-0 pr-0 lg:pr-8 relative min-h-[500px]">
+          <div className="flex flex-col lg:flex-row items-start mb-24 flex-nowrap">
+            <div className="w-full lg:w-[45%] flex flex-col justify-center shrink-0 pr-0 lg:pr-8 relative min-h-[450px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
@@ -45,26 +45,26 @@ export function FeaturedProjects() {
                   transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0 flex flex-col justify-center"
                 >
-                  <h2 className="text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.1] font-serif mb-12 text-gray-900">
+                  <h2 className="text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.1] font-serif mb-8 text-gray-900">
                     {activeProject.titleLine1}<br/>{activeProject.titleLine2}
                   </h2>
                   
-                  <div className="flex flex-wrap gap-4 md:gap-8 text-xs md:text-sm tracking-widest uppercase font-mono mb-16 text-gray-600">
+                  <div className="flex flex-wrap gap-3 md:gap-6 text-[10px] md:text-xs tracking-widest uppercase font-mono mb-12 text-gray-600">
                     <span>[ {activeProject.size} ]</span>
                     <span>[ {activeProject.location} ]</span>
                     <span>[ {activeProject.year} ]</span>
                   </div>
                   
                   <p 
-                    className="text-sm md:text-base tracking-widest uppercase font-mono max-w-md mb-16 leading-relaxed text-gray-800"
+                    className="text-xs md:text-sm tracking-widest uppercase font-mono max-w-sm mb-12 leading-relaxed text-gray-800"
                     dangerouslySetInnerHTML={{ __html: activeProject.description }}
                   />
                   
                   <div>
                     <button className="flex items-center border border-black group hover:bg-transparent transition-colors duration-300">
-                      <span className="px-8 py-4 text-sm tracking-widest uppercase font-mono font-medium">View Project</span>
-                      <span className="border-l border-black p-4 group-hover:bg-black group-hover:text-white transition-colors duration-300">
-                        <ArrowUpRight className="w-5 h-5" />
+                      <span className="px-6 py-3 text-xs tracking-widest uppercase font-mono font-medium">View Project</span>
+                      <span className="border-l border-black p-3 group-hover:bg-black group-hover:text-white transition-colors duration-300">
+                        <ArrowUpRight className="w-4 h-4" />
                       </span>
                     </button>
                   </div>
@@ -73,7 +73,7 @@ export function FeaturedProjects() {
             </div>
             
             {/* Image bleeds out of the beige box to the right */}
-            <div className="w-full lg:w-[calc(67.5%+2rem)] mt-16 lg:mt-0 relative z-20 shrink-0 aspect-[4/3] lg:aspect-auto lg:h-[600px] overflow-hidden shadow-2xl bg-gray-200">
+            <div className="w-full lg:w-[calc(67.5%+2rem)] mt-12 lg:mt-0 relative z-20 shrink-0 aspect-[4/3] lg:aspect-auto lg:h-[500px] overflow-hidden shadow-2xl bg-gray-200">
               <AnimatePresence mode="wait">
                 <motion.img 
                   key={activeIndex}
@@ -94,7 +94,7 @@ export function FeaturedProjects() {
             {projectList.slice(0, 5).map((project, index) => (
               <div 
                 key={index} 
-                className="group relative flex items-center py-6 px-4 border-b border-black/20 overflow-hidden cursor-pointer"
+                className="group relative flex items-center py-5 px-4 border-b border-black/20 overflow-hidden cursor-pointer"
                 onClick={() => setActiveIndex(index)}
               >
                 {/* Hover Background - Smooth lamina flow slide up */}
@@ -102,11 +102,11 @@ export function FeaturedProjects() {
                 
                 {/* Content */}
                 <div className={`relative z-10 flex w-full items-center transition-colors duration-300 ${activeIndex === index ? 'text-white' : 'text-black group-hover:text-white'}`}>
-                  <div className={`flex-1 font-serif text-xl md:text-2xl transform transition-transform duration-500 ease-[0.22,1,0.36,1] ${activeIndex === index ? 'translate-x-4' : 'group-hover:translate-x-4'}`}>{project.name}</div>
-                  <div className={`flex-1 text-center font-mono text-xs md:text-sm tracking-widest uppercase transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{project.size}</div>
-                  <div className={`flex-1 text-right font-mono text-xs md:text-sm tracking-widest uppercase pr-4 md:pr-8 transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{project.location}</div>
+                  <div className={`flex-1 font-serif text-lg md:text-xl transform transition-transform duration-500 ease-[0.22,1,0.36,1] ${activeIndex === index ? 'translate-x-4' : 'group-hover:translate-x-4'}`}>{project.name}</div>
+                  <div className={`flex-1 text-center font-mono text-[10px] md:text-xs tracking-widest uppercase transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{project.size}</div>
+                  <div className={`flex-1 text-right font-mono text-[10px] md:text-xs tracking-widest uppercase pr-4 md:pr-8 transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{project.location}</div>
                   <div className={`transform transition-transform duration-500 ease-[0.22,1,0.36,1] ${activeIndex === index ? '-translate-x-4' : 'group-hover:-translate-x-4'}`}>
-                    <ArrowUpRight className={`w-5 h-5 transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-50 group-hover:opacity-100'}`} />
+                    <ArrowUpRight className={`w-4 h-4 transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-50 group-hover:opacity-100'}`} />
                   </div>
                 </div>
               </div>
@@ -114,11 +114,11 @@ export function FeaturedProjects() {
           </div>
 
           {/* Bottom Button */}
-          <div className="mt-20">
+          <div className="mt-16">
             <button className="flex items-center border border-black group hover:bg-transparent transition-colors duration-300">
-              <span className="px-8 py-4 text-sm tracking-widest uppercase font-mono font-medium">Our Achievements</span>
-              <span className="border-l border-black p-4 group-hover:bg-black group-hover:text-white transition-colors duration-300">
-                <ArrowUpRight className="w-5 h-5" />
+              <span className="px-6 py-3 text-xs tracking-widest uppercase font-mono font-medium">Our Achievements</span>
+              <span className="border-l border-black p-3 group-hover:bg-black group-hover:text-white transition-colors duration-300">
+                <ArrowUpRight className="w-4 h-4" />
               </span>
             </button>
           </div>
