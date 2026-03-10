@@ -75,7 +75,7 @@ export const TeamSection = () => {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative h-screen bg-[#111] overflow-hidden flex items-center">
+    <section ref={containerRef} className="relative h-[100dvh] bg-[#111] overflow-hidden flex items-center">
       {/* Fixed Header */}
       <div className="absolute top-6 md:top-12 left-6 md:left-12 lg:left-24 z-10 pointer-events-none">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-4">

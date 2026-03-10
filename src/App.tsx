@@ -373,7 +373,7 @@ export default function App() {
     <div ref={mainRef} className="min-h-[150vh] bg-[#f5f5f5] font-sans overflow-x-hidden w-full">
       {/* Sticky Nav */}
       <nav 
-        className="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-12 py-6 mix-blend-difference text-white flex flex-wrap justify-between items-center w-full gap-y-4 transition-all duration-300 pointer-events-auto"
+        className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-12 pt-6 pb-2 mix-blend-difference text-white flex flex-wrap justify-between items-center w-full gap-y-4 transition-opacity duration-1000 pointer-events-auto ${introFinished ? 'opacity-100' : 'opacity-0'}`}
       >
         {navItems.map((item, index) => (
           <div 
@@ -431,7 +431,7 @@ export default function App() {
         </div>
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex flex-col justify-between h-full px-6 md:px-10 lg:px-12 pt-4 md:pt-6 lg:pt-8 pb-8 md:pb-12 pointer-events-none">
+        <div className="relative z-10 flex flex-col justify-between h-full px-6 md:px-10 lg:px-12 pt-20 md:pt-20 lg:pt-20 pb-8 md:pb-12 pointer-events-none">
           
           {/* Top Section */}
           <div className="w-full pointer-events-auto">

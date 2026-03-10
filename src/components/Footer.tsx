@@ -38,16 +38,16 @@ export const Footer = () => {
   }, { scope: footerRef });
 
   return (
-    <footer ref={footerRef} className="bg-[#c1bdae] text-[#141414] pt-6 pb-8 md:pb-12 px-6 md:px-12 w-full overflow-hidden flex flex-col h-screen justify-between">
+    <footer ref={footerRef} className="bg-[#c1bdae] text-[#141414] pt-6 pb-8 md:pb-12 px-6 md:px-12 w-full flex flex-col min-h-screen justify-between">
       {/* Massive Text & Action Buttons */}
       <div className="flex flex-col items-center justify-center w-full mb-8 md:mb-12 mt-[10vh] md:mt-[12vh]">
         <div className="overflow-hidden w-full">
-          <h1 className="footer-title text-[9vw] md:text-[10vw] leading-[0.85] font-medium tracking-tight uppercase text-center w-full">
+          <h1 className="footer-title text-[clamp(2.5rem,9vw,10rem)] leading-[0.85] font-medium tracking-tight uppercase text-center w-full">
             FIRST GENERATION
           </h1>
         </div>
         <div className="overflow-hidden w-full">
-          <h2 className="footer-title text-[2.5vw] md:text-[3.5vw] leading-none font-medium tracking-[0.3em] uppercase text-center mt-2 md:mt-4 mb-8 md:mb-10">
+          <h2 className="footer-title text-[clamp(1rem,3vw,3rem)] leading-none font-medium tracking-[0.3em] uppercase text-center mt-2 md:mt-4 mb-8 md:mb-10">
             HOMES LLC
           </h2>
         </div>
