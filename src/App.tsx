@@ -519,7 +519,7 @@ export default function App() {
       <div className="w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
         <div className="max-w-[1400px] mx-auto">
           {/* Title */}
-          <h2 className="about-text text-6xl md:text-7xl lg:text-[90px] font-cormorant font-light tracking-tight text-gray-900 mb-8 ml-0 md:ml-[5%]">
+          <h2 className="about-text text-6xl md:text-7xl lg:text-[90px] font-serif tracking-tight text-gray-900 mb-8 ml-0 md:ml-[5%]">
             Who we are...
           </h2>
 
@@ -539,7 +539,7 @@ export default function App() {
           {/* Intro to Images Header */}
           <div className="w-full flex justify-end md:pr-[5%] mb-16 md:mb-24">
             <h3 className="about-text text-4xl md:text-5xl lg:text-6xl font-serif tracking-tight text-gray-900">
-              At FGH LLC
+              At First Generation Homes
             </h3>
           </div>
 
