@@ -212,6 +212,7 @@ export default function App() {
   const [introFinished, setIntroFinished] = useState(false);
   const [selectedProject, setSelectedProject] = useState<{id: number, src: string, title: string, location: string} | null>(null);
   const [navTheme, setNavTheme] = useState<'light' | 'dark'>('dark');
+  const [isInquiryVisible, setIsInquiryVisible] = useState(false);
   
   const mainRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -303,6 +304,25 @@ export default function App() {
       document.body.style.overflow = '';
     };
   }, [introFinished, lenisInstance]);
+
+  // Track if inquiry section is visible
+  useEffect(() => {
+    const inquirySection = document.getElementById('inquiry');
+    if (!inquirySection) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInquiryVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 } // Trigger when 20% of the section is visible
+    );
+
+    observer.observe(inquirySection);
+
+    return () => {
+      if (inquirySection) observer.unobserve(inquirySection);
+    };
+  }, []);
 
   useGSAP(() => {
     // Initial states
@@ -527,10 +547,10 @@ export default function App() {
         </div>
 
         {/* Right Preview Image - Positioned half outside */}
-        <div className="absolute right-4 md:right-16 lg:right-32 bottom-0 translate-y-[45%] hidden sm:block z-20 pointer-events-auto">
+        <div className="absolute right-4 md:right-16 lg:right-32 bottom-0 translate-y-[40%] hidden sm:block z-20 pointer-events-auto">
           <div 
             ref={previewRef}
-            className="w-[250px] h-[160px] md:w-[480px] md:h-[300px] overflow-hidden cursor-pointer transition-all duration-300 relative"
+            className="w-[220px] h-[140px] md:w-[400px] md:h-[250px] overflow-hidden cursor-pointer transition-all duration-300 relative"
             onClick={() => setActiveIndex((current) => (current + 1) % heroImages.length)}
           >
             <AnimatePresence initial={false}>
@@ -707,15 +727,20 @@ export default function App() {
       </AnimatePresence>
 
       {/* Floating Action Button */}
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: introFinished ? 1 : 0, y: introFinished ? 0 : 20 }}
-        transition={{ duration: 0.5, delay: 1 }}
-        onClick={() => scrollToSection('inquiry')}
-        className={`fixed bottom-8 left-8 z-[150] mix-blend-difference text-white border border-white rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 ${!introFinished ? 'pointer-events-none' : ''}`}
-      >
-        Start Your Project
-      </motion.button>
+      <AnimatePresence>
+        {!isInquiryVisible && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: introFinished ? 1 : 0, y: introFinished ? 0 : 20 }}
+            exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+            transition={{ duration: 0.5, delay: introFinished ? 0 : 1 }}
+            onClick={() => scrollToSection('inquiry')}
+            className={`fixed bottom-8 left-8 z-[150] mix-blend-difference text-white border border-white rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 ${!introFinished ? 'pointer-events-none' : ''}`}
+          >
+            Start Your Project
+          </motion.button>
+        )}
+      </AnimatePresence>
 
     </div>
   );

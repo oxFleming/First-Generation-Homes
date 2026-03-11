@@ -66,14 +66,14 @@ export const Footer = () => {
       </div>
 
       {/* Bottom Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-8 lg:gap-12 w-full max-w-[1800px] mx-auto mt-auto pt-8 border-t border-black/10">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-8 lg:gap-12 w-full max-w-[1800px] mx-auto mt-auto pt-8 border-t border-black/10">
         {/* Column 1: Contact */}
-        <div className="footer-col flex flex-col gap-6">
+        <div className="footer-col flex flex-col gap-6 lg:col-span-2">
           <div>
             <h4 className="text-xs md:text-sm font-semibold mb-3">Contact</h4>
             <div className="flex flex-col gap-1 text-[10px] md:text-xs tracking-widest uppercase font-mono">
               <p>630-326-5117</p>
-              <p>MATTHEW.KALESANWO@FGIPGROUP.NET</p>
+              <p className="break-all sm:break-normal">MATTHEW.KALESANWO@FGIPGROUP.NET</p>
             </div>
           </div>
         </div>
