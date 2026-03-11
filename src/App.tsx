@@ -693,34 +693,36 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 p-4 md:p-12 cursor-pointer"
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-12 cursor-pointer"
             onClick={() => setSelectedProject(null)}
           >
-            <button 
-              className="absolute top-6 right-6 text-white hover:text-gray-400 transition-colors z-[210]"
-              onClick={() => setSelectedProject(null)}
-            >
-              <X size={32} strokeWidth={1.5} />
-            </button>
-            <motion.img 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              src={selectedProject.src} 
-              alt={selectedProject.title} 
-              className="max-w-full max-h-full object-contain shadow-2xl cursor-default"
-              onClick={(e) => e.stopPropagation()}
-            />
             <motion.div 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              transition={{ delay: 0.2 }}
-              className="absolute bottom-8 left-8 text-white pointer-events-none"
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-4xl max-h-[85vh] bg-[#111] rounded-2xl overflow-hidden shadow-2xl flex flex-col cursor-default border border-white/10"
+              onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-serif tracking-widest uppercase mb-2">{selectedProject.title}</h3>
-              <p className="text-sm text-gray-400 uppercase tracking-widest">{selectedProject.location}</p>
+              <button 
+                className="absolute top-4 right-4 z-[210] p-2 bg-black/50 hover:bg-black/80 rounded-full text-white transition-colors"
+                onClick={() => setSelectedProject(null)}
+              >
+                <X size={20} strokeWidth={2} />
+              </button>
+              
+              <div className="relative w-full flex-1 min-h-0 bg-black flex items-center justify-center overflow-hidden">
+                <img 
+                  src={selectedProject.src} 
+                  alt={selectedProject.title} 
+                  className="w-full h-full object-cover sm:object-contain"
+                />
+              </div>
+              
+              <div className="p-6 md:p-8 bg-[#111] text-white shrink-0">
+                <h3 className="text-xl md:text-2xl font-sans font-bold tracking-tight uppercase mb-1">{selectedProject.title}</h3>
+                <p className="text-xs md:text-sm text-gray-400 uppercase tracking-widest font-mono">{selectedProject.location}</p>
+              </div>
             </motion.div>
           </motion.div>
         )}
