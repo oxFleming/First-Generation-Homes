@@ -40,10 +40,10 @@ export const Testimonials = () => {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white mb-6">
@@ -59,8 +59,8 @@ export const Testimonials = () => {
               style={{ y: index % 2 === 0 ? y1 : y2 }}
               className="relative group"
             >
-              <div className="absolute inset-0 bg-white/5 rounded-3xl transform -rotate-1 group-hover:rotate-1 transition-transform duration-500 ease-out" />
-              <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-white/10 p-6 md:p-8 rounded-3xl h-full flex flex-col">
+              <div className="absolute inset-0 bg-white/5 rounded-3xl transform -rotate-1 group-hover:rotate-1 transition-transform duration-700 ease-[0.16,1,0.3,1]" />
+              <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-white/10 p-6 md:p-8 rounded-3xl h-full flex flex-col transition-transform duration-700 ease-[0.16,1,0.3,1] group-hover:-translate-y-2">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
                 
                 <p className="text-sm md:text-[15px] text-zinc-300 leading-relaxed mb-6 flex-grow font-sans font-light">

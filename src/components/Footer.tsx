@@ -20,20 +20,20 @@ export const Footer = () => {
 
     // Animate Massive Text
     tl.fromTo('.footer-title', 
-      { y: 100, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: 'power4.out', stagger: 0.1 }
+      { y: 120, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out', stagger: 0.15 }
     )
     // Animate Action Buttons
     .fromTo('.footer-action',
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1 },
-      '-=0.5'
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.1 },
+      '-=0.6'
     )
     // Animate Bottom Grid Columns
     .fromTo('.footer-col',
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1 },
-      '-=0.4'
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.1 },
+      '-=0.6'
     );
   }, { scope: footerRef });
 

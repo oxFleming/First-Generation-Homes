@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring, useMotionTemplate } from 'framer-motion';
 import { Plus, Minus, ArrowUpRight, X, CheckSquare } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -94,7 +94,7 @@ const categories = [
   }
 ];
 
-function PortfolioCategory({ title, subtitle, projects, onProjectClick }: { title: string, subtitle: string, projects: any[], onProjectClick: (project: any) => void }) {
+function PortfolioCategory({ title, subtitle, projects, onProjectClick }: { key?: React.Key, title: string, subtitle: string, projects: any[], onProjectClick: (project: any) => void }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const catRef = useRef<HTMLDivElement>(null);
 
@@ -188,6 +188,7 @@ function PortfolioCategory({ title, subtitle, projects, onProjectClick }: { titl
                         src={project.src} 
                         alt={project.title} 
                         className="w-full h-full object-cover transition-transform duration-1000 ease-[0.16,1,0.3,1] group-hover/item:scale-105"
+                        referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/item:opacity-100 transition-opacity duration-500 ease-[0.16,1,0.3,1] flex items-center justify-center">
                         <div className="w-8 h-8 bg-white text-black flex items-center justify-center transform translate-y-4 group-hover/item:translate-y-0 transition-transform duration-500 ease-[0.16,1,0.3,1]">
@@ -230,6 +231,9 @@ export default function App() {
   const smoothScrollY = useSpring(scrollY, { damping: 25, stiffness: 100, mass: 0.5 });
   const backgroundY = useTransform(smoothScrollY, [0, 1000], ['0%', '30%']);
 
+  const buttonProgress = useTransform(scrollY, [0, 400], [1, 0]);
+  const buttonTransform = useMotionTemplate`translate(calc(${buttonProgress} * (50vw - 32px - 50%)), calc(${buttonProgress} * (-57.5vh + 32px + 50%))) scale(calc(1 + 0.2 * ${buttonProgress}))`;
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element && lenisInstance) {
@@ -267,9 +271,10 @@ export default function App() {
   // Smooth scrolling with Lenis
   useEffect(() => {
     const lenis = new Lenis({
-      lerp: 0.08,
+      lerp: 0.05, // Smoother lerp
       wheelMultiplier: 1,
-      touchMultiplier: 2,
+      touchMultiplier: 1.5,
+      smoothWheel: true,
     });
 
     setLenisInstance(lenis);
@@ -336,36 +341,40 @@ export default function App() {
 
     tlRef.current = gsap.timeline({ 
       paused: true, 
-      onComplete: () => setIntroFinished(true) 
+      onComplete: () => {
+        setIntroFinished(true);
+        // Refresh ScrollTrigger after intro animation finishes and layout settles
+        setTimeout(() => ScrollTrigger.refresh(), 100);
+      }
     });
 
     // Fade in the small image container at the very beginning
-    gsap.to(bgContainerRef.current, { opacity: 1, duration: 0.4, ease: 'power2.inOut' });
+    gsap.to(bgContainerRef.current, { opacity: 1, duration: 0.6, ease: 'power2.inOut' });
 
     // The main expansion timeline (played after shuffle)
     tlRef.current
       .to(bgContainerRef.current, {
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-        duration: 1.0,
+        duration: 1.4,
         ease: 'expo.inOut'
       })
       .to(titleRef.current, {
         color: '#ffffff',
-        duration: 0.6,
+        duration: 0.8,
         ease: 'power2.inOut'
-      }, '-=0.6')
+      }, '-=0.8')
       .to(lineRef.current, {
         backgroundColor: 'rgba(255,255,255,0.3)',
-        duration: 0.6,
+        duration: 0.8,
         ease: 'power2.inOut'
-      }, '-=0.6')
+      }, '-=0.8')
       .to([bottomTextRef.current, previewRef.current], {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        stagger: 0.1,
+        duration: 1,
+        stagger: 0.15,
         ease: 'expo.out'
-      }, '-=0.4');
+      }, '-=0.6');
 
     // Pin the navigation
     ScrollTrigger.create({
@@ -392,12 +401,12 @@ export default function App() {
     const aboutTexts = gsap.utils.toArray('.about-text');
     aboutTexts.forEach((text: any) => {
       gsap.fromTo(text,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
-          ease: 'power3.out',
+          duration: 1.4,
+          ease: 'power4.out',
           scrollTrigger: {
             trigger: text,
             start: 'top 85%',
@@ -413,12 +422,13 @@ export default function App() {
       
       // Reveal
       gsap.fromTo(container,
-        { y: 100, opacity: 0 },
+        { y: 100, opacity: 0, clipPath: 'inset(20% 0 0 0)' },
         {
           y: 0,
           opacity: 1,
-          duration: 1.2,
-          ease: 'power3.out',
+          clipPath: 'inset(0% 0 0 0)',
+          duration: 1.5,
+          ease: 'power4.out',
           scrollTrigger: {
             trigger: container,
             start: 'top 85%',
@@ -428,16 +438,16 @@ export default function App() {
 
       // Parallax
       gsap.fromTo(img,
-        { scale: 1.2, yPercent: -10 },
+        { scale: 1.15, yPercent: -15 },
         {
           scale: 1,
-          yPercent: 10,
+          yPercent: 15,
           ease: 'none',
           scrollTrigger: {
             trigger: container,
             start: 'top bottom',
             end: 'bottom top',
-            scrub: 1.5
+            scrub: 1
           }
         }
       );
@@ -464,6 +474,7 @@ export default function App() {
                 src={heroImages[shuffleIndex]}
                 alt="Background"
                 className="absolute inset-0 w-full h-full object-cover opacity-75"
+                referrerPolicy="no-referrer"
               />
             ) : (
               <AnimatePresence initial={false}>
@@ -472,10 +483,11 @@ export default function App() {
                   src={heroImages[activeIndex]}
                   alt="Background"
                   className="absolute inset-0 w-full h-full object-cover"
-                  initial={{ scale: 1.1, opacity: 0 }}
+                  referrerPolicy="no-referrer"
+                  initial={{ scale: 1.15, opacity: 0 }}
                   animate={{ scale: 1, opacity: 0.75 }}
                   exit={{ scale: 0.95, opacity: 0 }}
-                  transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
+                  transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                 />
               </AnimatePresence>
             )}
@@ -539,9 +551,9 @@ export default function App() {
           >
             {/* Left Text */}
             <div className="max-w-lg text-lg md:text-xl lg:text-2xl leading-[1.3] font-normal tracking-tight">
-              OUR agency architecture designs<br />
-              of the residences exceptional In of the<br />
-              places rare, in France And In THE world.
+              WE BUILD exceptional residential properties<br />
+              and custom homes, delivering unparalleled<br />
+              craftsmanship across Chicago and beyond.
             </div>
           </div>
         </div>
@@ -559,10 +571,11 @@ export default function App() {
                 src={heroImages[(activeIndex + 1) % heroImages.length]}
                 alt="Preview"
                 className="absolute inset-0 w-full h-full object-cover"
-                initial={{ scale: 1.1, opacity: 0 }}
+                referrerPolicy="no-referrer"
+                initial={{ scale: 1.15, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
-                transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
               />
             </AnimatePresence>
           </div>
@@ -605,7 +618,7 @@ export default function App() {
                 <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Envision</span>
               </div>
               <div className="w-full md:w-[70%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop" alt="Envision" className="w-full aspect-[4/3] object-cover" />
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop" alt="Envision" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
               </div>
             </div>
 
@@ -615,7 +628,7 @@ export default function App() {
                 <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Design</span>
               </div>
               <div className="w-full md:w-[75%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" alt="Design" className="w-full aspect-[16/10] object-cover" />
+                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" alt="Design" className="w-full aspect-[16/10] object-cover" referrerPolicy="no-referrer" />
               </div>
             </div>
 
@@ -623,7 +636,7 @@ export default function App() {
             <div className="flex flex-col md:flex-row items-start w-full md:w-[95%] lg:w-[90%] md:ml-[2%] md:-mt-16 lg:-mt-24 relative z-30 gap-12 md:gap-16 lg:gap-24">
               <div className="w-full md:w-[50%] flex flex-col">
                 <div className="img-container overflow-hidden mb-6 shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1541888086925-0c13d4f47c54?q=80&w=1200&auto=format&fit=crop" alt="Build" className="w-full aspect-[4/3] object-cover" />
+                  <img src="https://images.unsplash.com/photo-1541888086925-0c13d4f47c54?q=80&w=1200&auto=format&fit=crop" alt="Build" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="flex justify-start md:pl-8">
                   <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Build</span>
@@ -716,6 +729,7 @@ export default function App() {
                   src={selectedProject.src} 
                   alt={selectedProject.title} 
                   className="w-full h-full object-cover sm:object-contain"
+                  referrerPolicy="no-referrer"
                 />
               </div>
               
@@ -732,12 +746,13 @@ export default function App() {
       <AnimatePresence>
         {!isInquiryVisible && (
           <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: introFinished ? 1 : 0, y: introFinished ? 0 : 20 }}
-            exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: introFinished ? 1 : 0 }}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
             transition={{ duration: 0.5, delay: introFinished ? 0 : 1 }}
+            style={{ transform: buttonTransform }}
             onClick={() => scrollToSection('inquiry')}
-            className={`fixed bottom-8 left-8 z-[150] mix-blend-difference text-white border border-white rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 ${!introFinished ? 'pointer-events-none' : ''}`}
+            className={`fixed bottom-8 left-8 z-[150] rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors duration-300 ${!introFinished ? 'pointer-events-none' : ''} ${navTheme === 'dark' ? 'text-white border border-white hover:bg-white hover:text-black' : 'text-black border border-black hover:bg-black hover:text-white'}`}
           >
             Start Your Project
           </motion.button>

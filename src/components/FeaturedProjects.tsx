@@ -208,10 +208,10 @@ export function FeaturedProjects() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
-                  initial={{ opacity: 0, y: 15 }}
+                  initial={{ opacity: 0, y: 25 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  exit={{ opacity: 0, y: -25 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0 flex flex-col justify-center"
                 >
                   <h2 className="text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] font-serif mb-6 text-gray-900">
@@ -249,13 +249,14 @@ export function FeaturedProjects() {
               <AnimatePresence mode="wait">
                 <motion.img 
                   key={activeIndex}
-                  initial={{ opacity: 0, scale: 1.03 }}
+                  initial={{ opacity: 0, scale: 1.05 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                   src={activeProject.image} 
                   alt={activeProject.name} 
                   className="absolute inset-0 w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
                 />
               </AnimatePresence>
             </div>

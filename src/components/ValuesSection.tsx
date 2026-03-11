@@ -1,13 +1,40 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function ValuesSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!sectionRef.current || !bgRef.current) return;
+
+    gsap.fromTo(bgRef.current,
+      { yPercent: -15 },
+      {
+        yPercent: 15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      }
+    );
+  }, { scope: sectionRef });
+
   return (
     <>
-      <section className="relative w-full min-h-[110vh] flex items-center justify-center overflow-hidden" data-theme="dark">
+      <section ref={sectionRef} className="relative w-full min-h-[110vh] flex items-center justify-center overflow-hidden" data-theme="dark">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat scale-105"
+          ref={bgRef}
+          className="absolute inset-0 w-full h-[130%] -top-[15%] bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop")' }}
         >
           {/* Subtle overlay to ensure text readability */}
