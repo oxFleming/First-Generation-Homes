@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring } from 'framer-motion';
-import { Plus, Minus, ArrowUpRight, X } from 'lucide-react';
+import { Plus, Minus, ArrowUpRight, X, CheckSquare } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,6 +9,7 @@ import { FeaturedProjects } from './components/FeaturedProjects';
 import { ValuesSection } from './components/ValuesSection';
 import { Testimonials } from './components/Testimonials';
 import { TeamSection } from './components/TeamSection';
+import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -465,7 +466,7 @@ export default function App() {
         </div>
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex flex-col justify-between h-full pt-8 md:pt-10 lg:pt-10 pb-8 md:pb-12 pointer-events-none">
+        <div className="relative z-[100] flex flex-col justify-between h-full pt-8 md:pt-10 lg:pt-10 pb-8 md:pb-12 pointer-events-none">
           
           {/* Top Section */}
           <div className="w-full pointer-events-auto">
@@ -490,7 +491,7 @@ export default function App() {
             {/* Navigation Options */}
             <nav 
               ref={navRef}
-              className={`flex flex-wrap justify-between items-center w-full px-6 md:px-10 lg:px-12 gap-y-4 transition-all duration-500 ${introFinished ? 'opacity-100' : 'opacity-0'} z-50 ${navTheme === 'dark' ? 'text-white' : 'text-black'}`}
+              className={`flex flex-wrap justify-between items-center w-full px-6 md:px-10 lg:px-12 gap-y-4 transition-all duration-500 ${introFinished ? 'opacity-100' : 'opacity-0'} z-[100] ${navTheme === 'dark' ? 'text-white' : 'text-black'}`}
             >
               {navItems.map((item, index) => (
                 <div 
@@ -526,10 +527,10 @@ export default function App() {
         </div>
 
         {/* Right Preview Image - Positioned half outside */}
-        <div className="absolute right-4 md:right-16 lg:right-32 bottom-0 translate-y-[30%] hidden sm:block z-20 pointer-events-auto">
+        <div className="absolute right-4 md:right-16 lg:right-32 bottom-0 translate-y-[45%] hidden sm:block z-20 pointer-events-auto">
           <div 
             ref={previewRef}
-            className="w-[200px] h-[130px] md:w-[350px] md:h-[220px] overflow-hidden cursor-pointer transition-all duration-300 relative"
+            className="w-[250px] h-[160px] md:w-[480px] md:h-[300px] overflow-hidden cursor-pointer transition-all duration-300 relative"
             onClick={() => setActiveIndex((current) => (current + 1) % heroImages.length)}
           >
             <AnimatePresence initial={false}>
@@ -625,7 +626,7 @@ export default function App() {
       </div>
 
       {/* Featured Projects Section */}
-      <div id="projects" data-theme="dark">
+      <div id="projects" data-theme="light">
         <FeaturedProjects />
       </div>
 
@@ -633,7 +634,7 @@ export default function App() {
       <ValuesSection />
 
       {/* Portfolio Sections */}
-      <div id="what-we-do" className="bg-[#c1bdae] pb-16 md:pb-24" data-theme="light">
+      <div id="portfolio-categories" className="bg-[#c1bdae] pb-16 md:pb-24" data-theme="light">
         {categories.map((category) => (
           <PortfolioCategory 
             key={category.id}
@@ -655,6 +656,11 @@ export default function App() {
         <TeamSection />
       </div>
 
+      {/* Contact Form Section */}
+      <div id="inquiry" data-theme="dark">
+        <ContactForm />
+      </div>
+
       {/* Footer Section */}
       <div id="contact" data-theme="light">
         <Footer />
@@ -667,11 +673,11 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 md:p-12 cursor-pointer"
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 p-4 md:p-12 cursor-pointer"
             onClick={() => setSelectedProject(null)}
           >
             <button 
-              className="absolute top-6 right-6 text-white hover:text-gray-400 transition-colors z-50"
+              className="absolute top-6 right-6 text-white hover:text-gray-400 transition-colors z-[210]"
               onClick={() => setSelectedProject(null)}
             >
               <X size={32} strokeWidth={1.5} />
@@ -699,6 +705,17 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Floating Action Button */}
+      <motion.button
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: introFinished ? 1 : 0, y: introFinished ? 0 : 20 }}
+        transition={{ duration: 0.5, delay: 1 }}
+        onClick={() => scrollToSection('inquiry')}
+        className={`fixed bottom-8 left-8 z-[150] mix-blend-difference text-white border border-white rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 ${!introFinished ? 'pointer-events-none' : ''}`}
+      >
+        Start Your Project
+      </motion.button>
 
     </div>
   );

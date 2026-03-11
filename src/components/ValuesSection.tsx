@@ -26,13 +26,19 @@ export function ValuesSection() {
       </section>
 
       {/* Blending Section */}
-      <section className="w-full bg-[#c1bdae] px-6 md:px-12 py-16 md:py-24 text-[#1a1a1a]" data-theme="light">
+      <section id="what-we-do" className="w-full bg-[#c1bdae] px-6 md:px-12 py-16 md:py-24 text-[#1a1a1a]" data-theme="light">
         <div className="max-w-7xl mx-auto">
           <p className="text-xl md:text-2xl lg:text-3xl font-sans font-light leading-tight max-w-4xl mb-12">
             From transparent communication to flawless execution, we are committed to building absolute trust alongside every legacy home we deliver.
           </p>
           
-          <button className="group flex items-center border border-[#1a1a1a] hover:bg-[#1a1a1a] transition-colors duration-300">
+          <button 
+            onClick={() => {
+              const element = document.getElementById('portfolio-categories');
+              if (element) element.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group flex items-center border border-[#1a1a1a] hover:bg-[#1a1a1a] transition-colors duration-300"
+          >
             <span className="px-10 py-5 text-sm md:text-base tracking-widest uppercase font-medium text-[#1a1a1a] group-hover:text-[#c1bdae] transition-colors duration-300">WHAT WE DO</span>
             <span className="p-5 bg-[#1a1a1a] text-white border-l border-[#1a1a1a]">
               <ArrowDown size={20} />
