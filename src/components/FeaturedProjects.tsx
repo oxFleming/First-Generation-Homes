@@ -17,44 +17,59 @@ interface ProjectModalProps {
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const tl = gsap.timeline();
 
-    tl.to(containerRef.current, {
-      y: '0%',
-      duration: 1,
-      ease: 'power4.inOut'
+    tl.to(backdropRef.current, {
+      opacity: 1,
+      duration: 0.4,
+      ease: 'power2.out'
     })
+    .to(containerRef.current, {
+      scale: 1,
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power3.out'
+    }, '-=0.2')
     .fromTo('.modal-title-line',
-      { y: 100, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out' },
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' },
       '-=0.4'
     )
     .fromTo(['.modal-divider', '.modal-detail-item', '.modal-desc', '.modal-close-btn'],
       { y: 20, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power3.out' },
-      '-=0.6'
+      '-=0.4'
     )
     .fromTo('.modal-image-container',
       { clipPath: 'inset(100% 0 0 0)' },
-      { clipPath: 'inset(0% 0 0 0)', duration: 1.2, stagger: 0.15, ease: 'power4.inOut' },
-      '-=0.8'
+      { clipPath: 'inset(0% 0 0 0)', duration: 0.8, stagger: 0.15, ease: 'power3.inOut' },
+      '-=0.6'
     )
     .fromTo('.modal-image',
       { scale: 1.2 },
-      { scale: 1, duration: 1.2, stagger: 0.15, ease: 'power4.out' },
+      { scale: 1, duration: 0.8, stagger: 0.15, ease: 'power3.out' },
       '<'
     );
-  }, { scope: containerRef });
+  }, { scope: backdropRef });
 
   const handleClose = () => {
-    gsap.to(containerRef.current, {
-      y: '100%',
-      duration: 0.8,
-      ease: 'power4.inOut',
-      onComplete: onClose
-    });
+    const tl = gsap.timeline({ onComplete: onClose });
+    tl.to(containerRef.current, {
+      scale: 0.95,
+      opacity: 0,
+      y: 20,
+      duration: 0.4,
+      ease: 'power2.in'
+    })
+    .to(backdropRef.current, {
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.in'
+    }, '-=0.2');
   };
 
   useEffect(() => {
@@ -67,59 +82,64 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
 
   return (
     <div 
-      ref={containerRef} 
-      className="fixed inset-0 z-[400] overflow-y-auto overscroll-none bg-[#141414] text-[#f5efe6] translate-y-full"
+      ref={backdropRef}
+      className="fixed inset-0 z-[400] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 opacity-0"
       data-lenis-prevent="true"
+      onClick={handleClose}
     >
-      <div className="flex flex-col lg:flex-row min-h-full">
+      <div 
+        ref={containerRef}
+        className="relative w-full max-w-6xl h-[85vh] bg-[#141414] text-[#f5efe6] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-white/10 translate-y-8 scale-95 opacity-0"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Left: Sticky Content */}
-        <div className="w-full lg:w-[40%] lg:sticky lg:top-0 lg:h-screen p-6 md:p-8 lg:p-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/10 relative z-10 bg-[#141414] shrink-0">
-        <div className="my-auto">
-          <button 
-            onClick={handleClose} 
-            className="modal-close-btn flex items-center gap-2 text-xs tracking-widest uppercase font-mono hover:opacity-70 transition-opacity mb-8 lg:mb-12"
-          >
-            <X size={16} /> Close Project
-          </button>
-          
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif leading-[0.9] mb-8">
-            <div className="overflow-hidden py-2"><div className="modal-title-line">{project.titleLine1}</div></div>
-            <div className="overflow-hidden py-2"><div className="modal-title-line italic text-white/70">{project.titleLine2}</div></div>
-          </h2>
-          
-          <div className="flex flex-col gap-4 text-[10px] md:text-xs tracking-widest uppercase font-mono mb-8">
-            <div className="modal-divider w-full h-px bg-white/10 mb-2"></div>
-            <div className="modal-detail-item flex justify-between">
-              <span className="opacity-50">Size</span>
-              <span>{project.size}</span>
+        <div className="w-full lg:w-[40%] h-auto lg:h-full overflow-y-auto p-6 md:p-8 lg:p-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/10 relative z-10 bg-[#141414] shrink-0">
+          <div className="my-auto">
+            <button 
+              onClick={handleClose} 
+              className="modal-close-btn flex items-center gap-2 text-xs tracking-widest uppercase font-mono hover:opacity-70 transition-opacity mb-8 lg:mb-12"
+            >
+              <X size={16} /> Close Project
+            </button>
+            
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif leading-[0.9] mb-8">
+              <div className="overflow-hidden py-2"><div className="modal-title-line">{project.titleLine1}</div></div>
+              <div className="overflow-hidden py-2"><div className="modal-title-line italic text-white/70">{project.titleLine2}</div></div>
+            </h2>
+            
+            <div className="flex flex-col gap-4 text-[10px] md:text-xs tracking-widest uppercase font-mono mb-8">
+              <div className="modal-divider w-full h-px bg-white/10 mb-2"></div>
+              <div className="modal-detail-item flex justify-between">
+                <span className="opacity-50">Size</span>
+                <span>{project.size}</span>
+              </div>
+              <div className="modal-detail-item flex justify-between">
+                <span className="opacity-50">Location</span>
+                <span>{project.location}</span>
+              </div>
+              <div className="modal-detail-item flex justify-between">
+                <span className="opacity-50">Year</span>
+                <span>{project.year}</span>
+              </div>
+              <div className="modal-divider w-full h-px bg-white/10 mt-2"></div>
             </div>
-            <div className="modal-detail-item flex justify-between">
-              <span className="opacity-50">Location</span>
-              <span>{project.location}</span>
-            </div>
-            <div className="modal-detail-item flex justify-between">
-              <span className="opacity-50">Year</span>
-              <span>{project.year}</span>
-            </div>
-            <div className="modal-divider w-full h-px bg-white/10 mt-2"></div>
+            
+            <p className="modal-desc text-xs md:text-sm leading-relaxed font-serif opacity-80 max-w-md">
+              {project.description.replace(/<br\/>/g, ' ')} This project represents the pinnacle of our design philosophy, combining aesthetic elegance with functional brilliance. Every detail was meticulously planned and executed to create a space that is both breathtaking and livable.
+            </p>
           </div>
-          
-          <p className="modal-desc text-sm md:text-base leading-relaxed font-serif opacity-80 max-w-md">
-            {project.description.replace(/<br\/>/g, ' ')} This project represents the pinnacle of our design philosophy, combining aesthetic elegance with functional brilliance. Every detail was meticulously planned and executed to create a space that is both breathtaking and livable.
-          </p>
         </div>
-      </div>
 
-      {/* Right: Scrollable Gallery */}
-      <div className="w-full lg:w-[60%] bg-[#0a0a0a]">
-        <div className="flex flex-col p-4 md:p-8 gap-4 md:gap-8">
-          {[project.image, ...genericGallery].map((img, idx) => (
-            <div key={idx} className="modal-image-container w-full aspect-[4/3] md:aspect-[16/9] relative overflow-hidden bg-white/5">
-              <img src={img} alt={`Gallery ${idx}`} className="modal-image w-full h-full object-cover" />
-            </div>
-          ))}
+        {/* Right: Scrollable Gallery */}
+        <div className="w-full lg:w-[60%] h-auto lg:h-full overflow-y-auto bg-[#0a0a0a]">
+          <div className="flex flex-col p-4 md:p-8 gap-4 md:gap-8">
+            {[project.image, ...genericGallery].map((img, idx) => (
+              <div key={idx} className="modal-image-container w-full aspect-[4/3] md:aspect-[16/9] relative overflow-hidden bg-white/5 rounded-lg">
+                <img src={img} alt={`Gallery ${idx}`} referrerPolicy="no-referrer" className="modal-image w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
