@@ -57,10 +57,11 @@ export const Footer = () => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => window.open('https://wa.me/16303265117', '_blank')}
             className="footer-action flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-full text-xs md:text-sm font-medium tracking-wider uppercase w-full sm:w-auto hover:bg-[#20bd5a] transition-colors shadow-lg shadow-[#25D366]/20"
           >
             <MessageCircle size={16} />
-            Talk to us on Whatsapp
+            Talk to us on WhatsApp
           </motion.button>
         </div>
       </div>

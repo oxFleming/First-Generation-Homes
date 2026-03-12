@@ -135,7 +135,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
           <div className="flex flex-col p-4 md:p-8 gap-4 md:gap-8">
             {[project.image, ...genericGallery].map((img, idx) => (
               <div key={idx} className="modal-image-container w-full aspect-[4/3] md:aspect-[16/9] relative overflow-hidden bg-white/5 rounded-lg">
-                <img src={img} alt={`Gallery ${idx}`} referrerPolicy="no-referrer" className="modal-image w-full h-full object-cover" />
+                <img src={img} alt={`${project.name} - Gallery Image ${idx + 1}`} referrerPolicy="no-referrer" className="modal-image w-full h-full object-cover" />
               </div>
             ))}
           </div>
@@ -212,7 +212,7 @@ export function FeaturedProjects() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -25 }}
                   transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                  className="absolute inset-0 flex flex-col justify-center"
+                  className="w-full flex flex-col justify-center"
                 >
                   <h2 className="text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] font-serif mb-6 text-gray-900">
                     {activeProject.titleLine1}<br/>{activeProject.titleLine2}
@@ -263,8 +263,8 @@ export function FeaturedProjects() {
           </div>
 
           {/* Project List */}
-          <div className="border-t border-black/20 relative z-20">
-            {projectList.slice(0, 5).map((project, index) => (
+          <div className="border-t border-black/20 relative z-20 max-h-[350px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {projectList.map((project, index) => (
               <div 
                 key={index} 
                 className="group relative flex items-center py-4 px-3 border-b border-black/20 overflow-hidden cursor-pointer"
@@ -287,16 +287,6 @@ export function FeaturedProjects() {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Bottom Button */}
-          <div className="mt-12">
-            <button className="flex items-center border border-black group hover:bg-transparent transition-colors duration-300">
-              <span className="px-5 py-2.5 text-[11px] tracking-widest uppercase font-mono font-medium">Our Achievements</span>
-              <span className="border-l border-black p-2.5 group-hover:bg-black group-hover:text-white transition-colors duration-300">
-                <ArrowUpRight className="w-4 h-4" />
-              </span>
-            </button>
           </div>
 
         </div>

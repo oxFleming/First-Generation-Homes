@@ -34,7 +34,7 @@ export const ContactForm = () => {
   }, { scope: sectionRef });
 
   return (
-    <div ref={sectionRef} className="bg-[#0a0a0a] text-white h-screen w-full flex items-center pt-20 pb-10 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <div ref={sectionRef} className="bg-[#0a0a0a] text-white min-h-[100dvh] w-full flex items-center pt-20 pb-10 px-6 md:px-12 lg:px-24 overflow-hidden">
       <div className="max-w-[1600px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
         
         {/* Left Column */}
@@ -159,6 +159,7 @@ export const ContactForm = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => window.open('https://wa.me/16303265117', '_blank')}
                 className="bg-[#25D366] text-white font-bold uppercase tracking-widest text-[10px] md:text-xs py-3.5 px-6 rounded-md flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-colors w-full sm:w-auto shadow-lg shadow-[#25D366]/20"
               >
                 Chat with us on WhatsApp <MessageCircle size={14} />

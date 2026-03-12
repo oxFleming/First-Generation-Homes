@@ -59,16 +59,14 @@ export const TeamSection = () => {
     const container = scrollRef.current;
     if (!container) return;
     
-    const scrollDistance = container.scrollWidth - window.innerWidth;
-    
     gsap.to(container, {
-      x: -scrollDistance,
+      x: () => -(container.scrollWidth - window.innerWidth),
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
         pin: true,
         scrub: 1,
-        end: () => "+=" + scrollDistance,
+        end: () => "+=" + (container.scrollWidth - window.innerWidth),
         invalidateOnRefresh: true,
       }
     });

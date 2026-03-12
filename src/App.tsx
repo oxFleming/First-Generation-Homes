@@ -11,6 +11,7 @@ import { Testimonials } from './components/Testimonials';
 import { TeamSection } from './components/TeamSection';
 import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
+import { FAQSection } from './components/FAQSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,24 +28,24 @@ const navItems = [
 const heroImages = [
   'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=2092&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1613490908676-430489d2d1b7?q=80&w=2070&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2070&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?q=80&w=2070&auto=format&fit=crop'
+  'https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2070&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2070&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2070&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2070&auto=format&fit=crop'
 ];
 
 const customResidentialProjects = [
   { id: 1, src: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1000&auto=format&fit=crop', title: 'Architectural Design', location: 'Chicago, IL' },
-  { id: 2, src: 'https://images.unsplash.com/photo-1590386184852-32a8b3036611?q=80&w=1000&auto=format&fit=crop', title: 'Structural Construction', location: 'Evanston, IL' },
+  { id: 2, src: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop', title: 'Structural Construction', location: 'Evanston, IL' },
   { id: 3, src: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1000&auto=format&fit=crop', title: 'Interior Finishing', location: 'Oak Brook, IL' },
   { id: 4, src: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop', title: 'Landscaping Integration', location: 'Naperville, IL' },
   { id: 5, src: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop', title: 'Custom Home', location: 'Chicago, IL' }
 ];
 
 const homeRenovationProjects = [
-  { id: 6, src: 'https://images.unsplash.com/photo-1556910103-1c02745a872f?q=80&w=1000&auto=format&fit=crop', title: 'Kitchen Remodels', location: 'Winnetka, IL' },
+  { id: 6, src: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=1000&auto=format&fit=crop', title: 'Kitchen Remodels', location: 'Winnetka, IL' },
   { id: 7, src: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1000&auto=format&fit=crop', title: 'Bathroom Renovations', location: 'Highland Park, IL' },
   { id: 8, src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop', title: 'Structural Upgrades', location: 'Lake Forest, IL' },
   { id: 9, src: 'https://images.unsplash.com/photo-1600210491369-e753d80a41f3?q=80&w=1000&auto=format&fit=crop', title: 'Interior Redesign', location: 'Glencoe, IL' },
@@ -53,10 +54,10 @@ const homeRenovationProjects = [
 
 const buildingDevelopmentProjects = [
   { id: 11, src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop', title: 'Development Planning', location: 'Chicago, IL' },
-  { id: 12, src: 'https://images.unsplash.com/photo-1541888086925-0c13d4f47c54?q=80&w=1000&auto=format&fit=crop', title: 'Building Construction', location: 'Evanston, IL' },
-  { id: 13, src: 'https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1000&auto=format&fit=crop', title: 'Project Management', location: 'Oak Brook, IL' },
+  { id: 12, src: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop', title: 'Building Construction', location: 'Evanston, IL' },
+  { id: 13, src: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1000&auto=format&fit=crop', title: 'Project Management', location: 'Oak Brook, IL' },
   { id: 14, src: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop', title: 'Development Consulting', location: 'Naperville, IL' },
-  { id: 15, src: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1000&auto=format&fit=crop', title: 'Real Estate Projects', location: 'Chicago, IL' }
+  { id: 15, src: 'https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?q=80&w=1000&auto=format&fit=crop', title: 'Material Procurement', location: 'Chicago, IL' }
 ];
 
 const constructionMaterialsProjects = [
@@ -213,7 +214,9 @@ export default function App() {
   const [introFinished, setIntroFinished] = useState(false);
   const [selectedProject, setSelectedProject] = useState<{id: number, src: string, title: string, location: string} | null>(null);
   const [navTheme, setNavTheme] = useState<'light' | 'dark'>('dark');
+  const [buttonTheme, setButtonTheme] = useState<'light' | 'dark'>('dark');
   const [isInquiryVisible, setIsInquiryVisible] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   
   const mainRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -226,8 +229,30 @@ export default function App() {
   const navRef = useRef<HTMLElement>(null);
 
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
+  const [isButtonOverDark, setIsButtonOverDark] = useState(true);
 
   const { scrollY } = useScroll();
+  
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest >= 400) {
+      setIsButtonOverDark(false);
+      return;
+    }
+    
+    // Calculate button Y position relative to viewport
+    const vh = window.innerHeight;
+    const startY = vh * 0.425; // 42.5vh
+    const endY = vh - 32; // 100vh - 32px
+    const progress = latest / 400;
+    const buttonY = startY + progress * (endY - startY);
+    
+    // Calculate hero section bottom relative to viewport
+    const heroBottom = vh * 0.85 - latest;
+    
+    // If button is above the hero bottom, it's over the dark hero section
+    setIsButtonOverDark(buttonY < heroBottom);
+  });
+
   const smoothScrollY = useSpring(scrollY, { damping: 25, stiffness: 100, mass: 0.5 });
   const backgroundY = useTransform(smoothScrollY, [0, 1000], ['0%', '30%']);
 
@@ -295,9 +320,9 @@ export default function App() {
     };
   }, []);
 
-  // Prevent scrolling during intro
+  // Prevent scrolling during intro and when modal is open
   useEffect(() => {
-    if (!introFinished) {
+    if (!introFinished || selectedProject) {
       document.body.style.overflow = 'hidden';
       if (lenisInstance) lenisInstance.stop();
     } else {
@@ -308,7 +333,7 @@ export default function App() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [introFinished, lenisInstance]);
+  }, [introFinished, lenisInstance, selectedProject]);
 
   // Track if inquiry section is visible
   useEffect(() => {
@@ -333,7 +358,9 @@ export default function App() {
     // Initial states
     gsap.set(bgContainerRef.current, { 
       clipPath: 'polygon(35% 47%, 65% 47%, 65% 71%, 35% 71%)',
-      opacity: 0
+      opacity: 0,
+      filter: 'blur(12px)',
+      scale: 0.95
     });
     gsap.set(titleRef.current, { color: '#000000' });
     gsap.set(lineRef.current, { backgroundColor: 'rgba(0,0,0,0.3)' });
@@ -349,14 +376,16 @@ export default function App() {
     });
 
     // Fade in the small image container at the very beginning
-    gsap.to(bgContainerRef.current, { opacity: 1, duration: 0.6, ease: 'power2.inOut' });
+    gsap.to(bgContainerRef.current, { opacity: 1, duration: 0.8, ease: 'power2.inOut' });
 
     // The main expansion timeline (played after shuffle)
     tlRef.current
       .to(bgContainerRef.current, {
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-        duration: 1.4,
-        ease: 'expo.inOut'
+        filter: 'blur(0px)',
+        scale: 1,
+        duration: 1.8,
+        ease: 'power3.inOut'
       })
       .to(titleRef.current, {
         color: '#ffffff',
@@ -395,6 +424,29 @@ export default function App() {
         onEnter: () => setNavTheme(section.dataset.theme as 'light' | 'dark'),
         onEnterBack: () => setNavTheme(section.dataset.theme as 'light' | 'dark'),
       });
+
+      // Theme switching for button (bottom of screen)
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top bottom-=52px', // Trigger when section hits the button area
+        end: 'bottom bottom-=52px',
+        onEnter: () => setButtonTheme(section.dataset.theme as 'light' | 'dark'),
+        onEnterBack: () => setButtonTheme(section.dataset.theme as 'light' | 'dark'),
+      });
+    });
+
+    // Active section tracking
+    navItems.forEach((item) => {
+      const element = document.getElementById(item.id);
+      if (element) {
+        ScrollTrigger.create({
+          trigger: element,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => setActiveSection(item.id),
+          onEnterBack: () => setActiveSection(item.id),
+        });
+      }
     });
 
     // ScrollTrigger Animations for About Section
@@ -507,9 +559,10 @@ export default function App() {
               <h1 
                 ref={titleRef}
                 className="flex justify-between w-full text-[5vw] md:text-[5.5vw] lg:text-[6vw] leading-[0.8] font-medium uppercase tracking-tight mb-4"
+                aria-label="First Generation Homes - Custom Residential Construction & Renovation"
               >
                 {'FIRST GENERATION HOMES'.split('').map((char, i) => (
-                  <span key={i}>{char === ' ' ? '\u00A0' : char}</span>
+                  <span key={i} aria-hidden="true">{char === ' ' ? '\u00A0' : char}</span>
                 ))}
               </h1>
               
@@ -533,10 +586,10 @@ export default function App() {
                   onClick={() => scrollToSection(item.id)}
                 >
                   <div className="relative flex items-center justify-center w-5 h-5">
-                    <span className={`absolute inset-0 transition-transform duration-300 ease-out scale-0 group-hover:scale-100 ${navTheme === 'dark' ? 'bg-white' : 'bg-black'}`} />
-                    <span className={`relative font-light text-lg leading-none transition-all duration-300 opacity-60 group-hover:opacity-100 ${navTheme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>+</span>
+                    <span className={`absolute inset-0 transition-transform duration-300 ease-out ${activeSection === item.id ? 'scale-100' : 'scale-0 group-hover:scale-100'} ${navTheme === 'dark' ? 'bg-white' : 'bg-black'}`} />
+                    <span className={`relative font-light text-lg leading-none transition-all duration-300 ${activeSection === item.id ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'} ${navTheme === 'dark' ? (activeSection === item.id ? 'text-black' : 'group-hover:text-black') : (activeSection === item.id ? 'text-white' : 'group-hover:text-white')}`}>+</span>
                   </div>
-                  <span className={`text-[10px] md:text-xs uppercase tracking-[0.2em] font-medium transition-opacity duration-300 ${activeIndex === index ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}`}>
+                  <span className={`text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all duration-300 ${activeSection === item.id ? 'font-bold opacity-100' : 'font-bold opacity-50 group-hover:opacity-100'}`}>
                     {item.label}
                   </span>
                 </div>
@@ -618,7 +671,7 @@ export default function App() {
                 <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Envision</span>
               </div>
               <div className="w-full md:w-[70%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop" alt="Envision" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1200&auto=format&fit=crop" alt="Desk with lamp and notebook representing our envisioning process for custom homes" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
               </div>
             </div>
 
@@ -628,7 +681,7 @@ export default function App() {
                 <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Design</span>
               </div>
               <div className="w-full md:w-[75%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" alt="Design" className="w-full aspect-[16/10] object-cover" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" alt="Architectural design process for custom residential construction" className="w-full aspect-[16/10] object-cover" referrerPolicy="no-referrer" />
               </div>
             </div>
 
@@ -636,7 +689,7 @@ export default function App() {
             <div className="flex flex-col md:flex-row items-start w-full md:w-[95%] lg:w-[90%] md:ml-[2%] md:-mt-16 lg:-mt-24 relative z-30 gap-12 md:gap-16 lg:gap-24">
               <div className="w-full md:w-[50%] flex flex-col">
                 <div className="img-container overflow-hidden mb-6 shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1541888086925-0c13d4f47c54?q=80&w=1200&auto=format&fit=crop" alt="Build" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop" alt="Construction site representing our building and development process" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="flex justify-start md:pl-8">
                   <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Build</span>
@@ -688,6 +741,9 @@ export default function App() {
       <div id="team" data-theme="dark">
         <TeamSection />
       </div>
+
+      {/* FAQ Section */}
+      <FAQSection />
 
       {/* Contact Form Section */}
       <div id="inquiry" data-theme="dark">
@@ -752,7 +808,7 @@ export default function App() {
             transition={{ duration: 0.5, delay: introFinished ? 0 : 1 }}
             style={{ transform: buttonTransform }}
             onClick={() => scrollToSection('inquiry')}
-            className={`fixed bottom-8 left-8 z-[150] rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors duration-300 ${!introFinished ? 'pointer-events-none' : ''} ${navTheme === 'dark' ? 'text-white border border-white hover:bg-white hover:text-black' : 'text-black border border-black hover:bg-black hover:text-white'}`}
+            className={`fixed bottom-8 left-8 z-[150] rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors duration-300 ${!introFinished ? 'pointer-events-none' : ''} ${(scrollY.get() < 400 ? (isButtonOverDark ? 'dark' : 'light') : buttonTheme) === 'dark' ? 'text-white border border-white hover:bg-white hover:text-black' : 'text-black border border-black hover:bg-black hover:text-white'}`}
           >
             Start Your Project
           </motion.button>
