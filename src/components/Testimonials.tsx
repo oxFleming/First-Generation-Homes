@@ -1,6 +1,12 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Quote } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+
+gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 const testimonials = [
   {
@@ -19,6 +25,9 @@ const testimonials = [
 
 export const Testimonials = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const dotRef = useRef<SVGCircleElement>(null);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -26,6 +35,25 @@ export const Testimonials = () => {
 
   const y1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
   const y2 = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+
+  useGSAP(() => {
+    if (pathRef.current && dotRef.current && containerRef.current) {
+      gsap.to(dotRef.current, {
+        motionPath: {
+          path: pathRef.current,
+          align: pathRef.current,
+          alignOrigin: [0.5, 0.5],
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }
+  }, { scope: containerRef });
 
   return (
     <section 
@@ -36,6 +64,26 @@ export const Testimonials = () => {
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
         <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+      </div>
+
+      {/* Decorative Path */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-10 flex justify-center items-center">
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+          <path 
+            ref={pathRef}
+            id="testimonial-path" 
+            d="M 100 0 C 300 200, 0 500, 500 500 C 1000 500, 700 800, 900 1000" 
+            fill="none" 
+            stroke="#ffffff" 
+            strokeWidth="2" 
+            strokeDasharray="10 10" 
+          />
+          <circle 
+            ref={dotRef}
+            cx="0" cy="0" r="8" 
+            fill="#ffffff" 
+          />
+        </svg>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">

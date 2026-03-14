@@ -4,6 +4,12 @@ import { Plus, Minus, ArrowUpRight, X, CheckSquare } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+import { Flip } from 'gsap/Flip';
+import { Draggable } from 'gsap/Draggable';
+import { Observer } from 'gsap/Observer';
+import { TextPlugin } from 'gsap/TextPlugin';
 import Lenis from 'lenis';
 import { FeaturedProjects } from './components/FeaturedProjects';
 import { ValuesSection } from './components/ValuesSection';
@@ -12,8 +18,22 @@ import { TeamSection } from './components/TeamSection';
 import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
 import { FAQSection } from './components/FAQSection';
+import { StoryCards } from './components/StoryCards';
 
-gsap.registerPlugin(ScrollTrigger);
+// Register free GSAP plugins
+gsap.registerPlugin(
+  ScrollTrigger,
+  ScrollToPlugin,
+  MotionPathPlugin,
+  Flip,
+  Draggable,
+  Observer,
+  TextPlugin
+);
+
+// Note: The following requested plugins are Club GSAP (Premium) plugins and require a paid license:
+// ScrollSmoother, DrawSVGPlugin, MorphSVGPlugin, MotionPathHelper, InertiaPlugin, SplitText, ScrambleTextPlugin, Physics2DPlugin, PhysicsPropsPlugin.
+// They cannot be installed automatically without an auth token.
 
 const navItems = [
   { id: 'home', label: 'Home' },
@@ -215,7 +235,6 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<{id: number, src: string, title: string, location: string} | null>(null);
   const [navTheme, setNavTheme] = useState<'light' | 'dark'>('dark');
   const [buttonTheme, setButtonTheme] = useState<'light' | 'dark'>('dark');
-  const [isInquiryVisible, setIsInquiryVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   
   const mainRef = useRef<HTMLDivElement>(null);
@@ -227,6 +246,11 @@ export default function App() {
   const previewRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const navRef = useRef<HTMLElement>(null);
+
+  // Refs for About Us path animation
+  const aboutSectionRef = useRef<HTMLDivElement>(null);
+  const aboutPathRef = useRef<SVGPathElement>(null);
+  const aboutDotRef = useRef<SVGRectElement>(null);
 
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
   const [isButtonOverDark, setIsButtonOverDark] = useState(true);
@@ -261,10 +285,16 @@ export default function App() {
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
-    if (element && lenisInstance) {
-      lenisInstance.scrollTo(element, { offset: 0, duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-    } else if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (element) {
+      if (lenisInstance) {
+        lenisInstance.scrollTo(element, { duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+      } else {
+        gsap.to(window, {
+          duration: 1.5,
+          scrollTo: { y: element, offsetY: 0 },
+          ease: 'power3.inOut'
+        });
+      }
     }
   };
 
@@ -335,24 +365,18 @@ export default function App() {
     };
   }, [introFinished, lenisInstance, selectedProject]);
 
-  // Track if inquiry section is visible
-  useEffect(() => {
-    const inquirySection = document.getElementById('inquiry');
-    if (!inquirySection) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInquiryVisible(entry.isIntersecting);
-      },
-      { threshold: 0.2 } // Trigger when 20% of the section is visible
-    );
-
-    observer.observe(inquirySection);
-
-    return () => {
-      if (inquirySection) observer.unobserve(inquirySection);
-    };
-  }, []);
+  useGSAP(() => {
+    if (introFinished) {
+      Draggable.create("#draggable-fab", {
+        type: "x,y",
+        edgeResistance: 0.65,
+        bounds: window,
+        onClick: function() {
+          scrollToSection('inquiry');
+        }
+      });
+    }
+  }, [introFinished, lenisInstance]);
 
   useGSAP(() => {
     // Initial states
@@ -372,6 +396,15 @@ export default function App() {
         setIntroFinished(true);
         // Refresh ScrollTrigger after intro animation finishes and layout settles
         setTimeout(() => ScrollTrigger.refresh(), 100);
+
+        // Typewriter effect using TextPlugin
+        const words = ["BUILD", "DESIGN", "CRAFT", "CREATE"];
+        let masterTl = gsap.timeline({ repeat: -1 });
+        words.forEach(word => {
+          let tl = gsap.timeline({ repeat: 1, yoyo: true, repeatDelay: 2 });
+          tl.to("#typewriter", { duration: 1, text: word, ease: "none" });
+          masterTl.add(tl);
+        });
       }
     });
 
@@ -466,6 +499,24 @@ export default function App() {
         }
       );
     });
+
+    // About Us Path Animation
+    if (aboutSectionRef.current && aboutPathRef.current && aboutDotRef.current) {
+      gsap.to(aboutDotRef.current, {
+        motionPath: {
+          path: aboutPathRef.current,
+          align: aboutPathRef.current,
+          alignOrigin: [0.5, 0.5],
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: aboutSectionRef.current,
+          start: "top center",
+          end: "bottom center",
+          scrub: 1
+        }
+      });
+    }
 
     // Image Parallax and Reveal
     const imgContainers = gsap.utils.toArray('.img-container');
@@ -604,7 +655,7 @@ export default function App() {
           >
             {/* Left Text */}
             <div className="max-w-lg text-lg md:text-xl lg:text-2xl leading-[1.3] font-normal tracking-tight">
-              WE BUILD exceptional residential properties<br />
+              WE <span id="typewriter" className="font-bold">BUILD</span> exceptional residential properties<br />
               and custom homes, delivering unparalleled<br />
               craftsmanship across Chicago and beyond.
             </div>
@@ -636,8 +687,30 @@ export default function App() {
       </div>
       
       {/* About Us Section */}
-      <div id="who-we-are" className="w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
-        <div className="max-w-[1400px] mx-auto">
+      <div id="who-we-are" ref={aboutSectionRef} className="relative w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
+        {/* Decorative Path */}
+        <div className="absolute left-4 md:left-12 top-0 bottom-0 w-24 pointer-events-none z-0 opacity-20 hidden md:block">
+          <svg viewBox="0 0 100 1000" preserveAspectRatio="xMidYMax slice" className="w-full h-full">
+            <path 
+              ref={aboutPathRef}
+              id="about-path" 
+              d="M 50 0 C 50 200, 100 300, 50 500 C 0 700, 50 800, 50 1000" 
+              fill="none" 
+              stroke="#1a1a1a" 
+              strokeWidth="2" 
+              strokeDasharray="4 8" 
+            />
+            <rect 
+              ref={aboutDotRef}
+              width="12" 
+              height="12" 
+              fill="#1a1a1a" 
+              transform="translate(-6, -6)" 
+            />
+          </svg>
+        </div>
+
+        <div className="relative z-10 max-w-[1400px] mx-auto">
           {/* Title */}
           <h2 className="about-text text-6xl md:text-7xl lg:text-[90px] font-serif tracking-tight text-gray-900 mb-8 ml-0 md:ml-[5%]">
             Who we are...
@@ -646,70 +719,20 @@ export default function App() {
           {/* New Text Content directly under the header */}
           <div className="ml-0 md:ml-[16%] lg:ml-[20%] max-w-4xl mb-16 md:mb-24">
             <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800 mb-6">
-              First Generation Homes LLC is a U.S.-based real estate development and construction company headquartered in Chicago, Illinois. The company focuses on residential construction, renovation, and development projects while also supporting international real estate initiatives.
+              We are a Chicago-based real estate development and construction company dedicated to creating exceptional living spaces. Our focus is on residential construction, custom home development, and thoughtful renovations, while also supporting international real estate initiatives.
             </p>
             <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800 mb-6">
-              The firm operates as part of the broader FGIP ecosystem and contributes strategic expertise in design, construction management, finishing products, and residential development planning.
+              We bring strategic expertise to every phase of a project—from design and construction management to selecting the perfect finishing products and planning residential developments.
             </p>
             <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800">
-              The company’s operations combine construction services, custom home development, and building renovation, delivering high-quality residential environments tailored to modern lifestyle and market demands.
+              By combining our passion for building with a deep understanding of modern lifestyles, we deliver high-quality environments tailored to your needs, creating spaces you'll be proud to call home.
             </p>
-          </div>
-
-          {/* Intro to Images Header */}
-          <div className="w-full flex justify-end md:pr-[5%] mb-16 md:mb-24">
-            <h3 className="about-text text-4xl md:text-5xl lg:text-6xl font-serif tracking-tight text-gray-900">
-              At First Generation Homes
-            </h3>
-          </div>
-
-          <div className="flex flex-col gap-16 md:gap-0">
-            
-            {/* WE ENVISION */}
-            <div className="flex flex-col md:flex-row items-start md:items-center w-full md:w-[75%] lg:w-[65%] md:ml-[5%] relative z-10">
-              <div className="w-full md:w-[30%] mb-4 md:mb-0 md:pr-8 flex justify-start md:justify-end">
-                <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Envision</span>
-              </div>
-              <div className="w-full md:w-[70%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1200&auto=format&fit=crop" alt="Desk with lamp and notebook representing our envisioning process for custom homes" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
-              </div>
-            </div>
-
-            {/* WE DESIGN */}
-            <div className="flex flex-col md:flex-row-reverse items-start md:items-center w-full md:w-[85%] lg:w-[75%] md:ml-auto md:-mt-24 lg:-mt-32 relative z-20">
-              <div className="w-full md:w-[25%] mt-4 md:mt-0 md:pl-8 flex justify-start">
-                <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Design</span>
-              </div>
-              <div className="w-full md:w-[75%] img-container overflow-hidden shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" alt="Architectural design process for custom residential construction" className="w-full aspect-[16/10] object-cover" referrerPolicy="no-referrer" />
-              </div>
-            </div>
-
-            {/* WE BUILD & TEXT */}
-            <div className="flex flex-col md:flex-row items-start w-full md:w-[95%] lg:w-[90%] md:ml-[2%] md:-mt-16 lg:-mt-24 relative z-30 gap-12 md:gap-16 lg:gap-24">
-              <div className="w-full md:w-[50%] flex flex-col">
-                <div className="img-container overflow-hidden mb-6 shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop" alt="Construction site representing our building and development process" className="w-full aspect-[4/3] object-cover" referrerPolicy="no-referrer" />
-                </div>
-                <div className="flex justify-start md:pl-8">
-                  <span className="about-text text-2xl md:text-3xl lg:text-4xl font-serif tracking-widest uppercase text-gray-900">We Build</span>
-                </div>
-              </div>
-              
-              <div className="w-full md:w-[50%] md:pt-24 lg:pt-32">
-                <p className="about-text text-[17px] md:text-[19px] leading-[1.6] font-sans font-light text-gray-800">
-                  We bridge the gap between visionary architecture and flawless on-site execution through meticulous craftsmanship and transparent project management.
-                  <br/><br/>
-                  Driven by an uncompromising standard of quality, we seamlessly transform complex blueprints into architectural masterpieces.
-                  <br/><br/>
-                  Ultimately, we don't just construct properties, we build legacy structures and client relationships designed to last generations.
-                </p>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
+
+      {/* Story Cards Section */}
+      <StoryCards />
 
       {/* Featured Projects Section */}
       <div id="projects" data-theme="light">
@@ -800,19 +823,22 @@ export default function App() {
 
       {/* Floating Action Button */}
       <AnimatePresence>
-        {!isInquiryVisible && (
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: introFinished ? 1 : 0 }}
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            transition={{ duration: 0.5, delay: introFinished ? 0 : 1 }}
-            style={{ transform: buttonTransform }}
-            onClick={() => scrollToSection('inquiry')}
-            className={`fixed bottom-8 left-8 z-[150] rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors duration-300 ${!introFinished ? 'pointer-events-none' : ''} ${(scrollY.get() < 400 ? (isButtonOverDark ? 'dark' : 'light') : buttonTheme) === 'dark' ? 'text-white border border-white hover:bg-white hover:text-black' : 'text-black border border-black hover:bg-black hover:text-white'}`}
+        <motion.div
+          key="fab-button"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: introFinished ? 1 : 0 }}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}
+          transition={{ duration: 0.5, delay: introFinished ? 0 : 1 }}
+          style={{ transform: buttonTransform }}
+          className={`fixed bottom-8 left-8 z-[150] ${!introFinished ? 'pointer-events-none' : ''}`}
+        >
+          <button
+            id="draggable-fab"
+            className={`rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors duration-300 cursor-grab active:cursor-grabbing ${(scrollY.get() < 400 ? (isButtonOverDark ? 'dark' : 'light') : buttonTheme) === 'dark' ? 'text-white border border-white hover:bg-white hover:text-black' : 'text-black border border-black hover:bg-black hover:text-white'}`}
           >
             Start Your Project
-          </motion.button>
-        )}
+          </button>
+        </motion.div>
       </AnimatePresence>
 
     </div>

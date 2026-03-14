@@ -37,9 +37,11 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onClose
 
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const update = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
+
+    gsap.ticker.add(update);
     gsap.ticker.lagSmoothing(0);
 
     const ctx = gsap.context(() => {
@@ -85,7 +87,7 @@ export const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onClose
     return () => {
       ctx.revert();
       lenis.destroy();
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+      gsap.ticker.remove(update);
     };
   }, []);
 

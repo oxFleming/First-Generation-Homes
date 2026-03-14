@@ -35,7 +35,7 @@ export const Footer = () => {
       { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.1 },
       '-=0.6'
     );
-  }, { scope: footerRef });
+  }, { scope: footerRef, dependencies: [] });
 
   return (
     <footer ref={footerRef} className="bg-[#c1bdae] text-[#141414] pt-6 pb-8 md:pb-12 px-6 md:px-12 w-full flex flex-col min-h-screen justify-between">

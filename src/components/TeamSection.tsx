@@ -70,7 +70,7 @@ export const TeamSection = () => {
         invalidateOnRefresh: true,
       }
     });
-  }, { scope: containerRef });
+  }, { scope: containerRef, dependencies: [] });
 
   return (
     <section ref={containerRef} className="relative h-[100dvh] bg-[#111] overflow-hidden flex items-center">

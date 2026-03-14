@@ -3,15 +3,18 @@ import { ArrowDown } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 export function ValuesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const circleRef = useRef<SVGCircleElement>(null);
 
   useGSAP(() => {
-    if (!sectionRef.current || !bgRef.current) return;
+    if (!sectionRef.current || !bgRef.current || !pathRef.current || !circleRef.current) return;
 
     gsap.fromTo(bgRef.current,
       { yPercent: -15 },
@@ -26,6 +29,21 @@ export function ValuesSection() {
         }
       }
     );
+
+    gsap.to(circleRef.current, {
+      motionPath: {
+        path: pathRef.current,
+        align: pathRef.current,
+        alignOrigin: [0.5, 0.5],
+      },
+      ease: "none",
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top center",
+        end: "bottom center",
+        scrub: 1
+      }
+    });
   }, { scope: sectionRef });
 
   return (
@@ -39,6 +57,28 @@ export function ValuesSection() {
         >
           {/* Subtle overlay to ensure text readability */}
           <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+
+        {/* Decorative SVG Path */}
+        <div className="absolute inset-0 pointer-events-none z-20 flex justify-center items-center opacity-30">
+          <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+            <path 
+              ref={pathRef}
+              id="values-path"
+              d="M 500 0 C 700 300, 300 700, 500 1000" 
+              fill="none" 
+              stroke="white" 
+              strokeWidth="1" 
+              strokeDasharray="4 8"
+            />
+            <circle 
+              ref={circleRef}
+              cx="0" 
+              cy="0" 
+              r="8" 
+              fill="#f5efe6" 
+            />
+          </svg>
         </div>
 
         {/* Content */}

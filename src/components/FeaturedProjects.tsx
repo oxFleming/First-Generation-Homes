@@ -3,6 +3,10 @@ import { ArrowUpRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { Observer } from 'gsap/Observer';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+
+gsap.registerPlugin(Observer, MotionPathPlugin);
 
 const genericGallery = [
   'https://images.unsplash.com/photo-1600607687931-cebf66713e28?q=80&w=1200&auto=format&fit=crop',
@@ -196,56 +200,81 @@ export function FeaturedProjects() {
 
   const activeProject = projectList[activeIndex];
 
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const polyRef = useRef<SVGPolygonElement>(null);
+
+  useGSAP(() => {
+    if (!imageContainerRef.current) return;
+
+    Observer.create({
+      target: imageContainerRef.current,
+      type: "pointer,touch",
+      onLeft: () => {
+        setActiveIndex((current) => (current + 1) % projectList.length);
+        setPauseKey(prev => prev + 1);
+      },
+      onRight: () => {
+        setActiveIndex((current) => (current === 0 ? projectList.length - 1 : current - 1));
+        setPauseKey(prev => prev + 1);
+      },
+      tolerance: 50,
+      preventDefault: true
+    });
+
+    // Path animation
+    if (polyRef.current && pathRef.current && sectionRef.current) {
+      gsap.to(polyRef.current, {
+        motionPath: {
+          path: pathRef.current,
+          align: pathRef.current,
+          alignOrigin: [0.5, 0.5],
+          autoRotate: true
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    }
+  }, { scope: sectionRef });
+
   return (
-    <div className="bg-white text-black py-12 lg:py-20 relative overflow-hidden">
-      <div className="max-w-[80rem] mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div ref={sectionRef} className="bg-white text-black py-6 lg:py-12 relative overflow-hidden min-h-screen flex items-center">
+      {/* Decorative Path */}
+      <div className="absolute top-1/2 left-0 w-full h-64 -translate-y-1/2 pointer-events-none z-0 opacity-10">
+        <svg viewBox="0 0 1000 200" preserveAspectRatio="none" className="w-full h-full">
+          <path 
+            ref={pathRef}
+            id="projects-path" 
+            d="M 0 100 C 250 200, 750 0, 1000 100" 
+            fill="none" 
+            stroke="#1a1a1a" 
+            strokeWidth="2" 
+          />
+          <polygon 
+            ref={polyRef}
+            points="0,-6 12,0 0,6" 
+            fill="#1a1a1a" 
+          />
+        </svg>
+      </div>
+
+      <div className="w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 h-full flex items-center">
         {/* Beige Box */}
-        <div className="bg-[#f5efe6] relative w-full lg:w-[80%] mx-auto pt-10 pb-10 lg:pt-16 lg:pb-16 px-5 sm:px-8 lg:px-12">
+        <div className="bg-[#f5efe6] relative w-full h-auto lg:h-[90vh] min-h-[600px] max-h-none lg:max-h-[850px] mx-auto p-6 lg:p-10 flex flex-col lg:flex-row gap-8 lg:gap-12 shadow-sm rounded-sm">
           
-          {/* Top Section */}
-          <div className="flex flex-col lg:flex-row items-start mb-20 flex-nowrap">
-            <div className="w-full lg:w-[45%] flex flex-col justify-center shrink-0 pr-0 lg:pr-8 relative min-h-[400px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, y: 25 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -25 }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                  className="w-full flex flex-col justify-center"
-                >
-                  <h2 className="text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] font-serif mb-6 text-gray-900">
-                    {activeProject.titleLine1}<br/>{activeProject.titleLine2}
-                  </h2>
-                  
-                  <div className="flex flex-wrap gap-2 md:gap-5 text-[9px] md:text-[11px] tracking-widest uppercase font-mono mb-10 text-gray-600">
-                    <span>[ {activeProject.size} ]</span>
-                    <span>[ {activeProject.location} ]</span>
-                    <span>[ {activeProject.year} ]</span>
-                  </div>
-                  
-                  <p 
-                    className="text-[11px] md:text-xs tracking-widest uppercase font-mono max-w-sm mb-10 leading-relaxed text-gray-800"
-                    dangerouslySetInnerHTML={{ __html: activeProject.description }}
-                  />
-                  
-                  <div>
-                    <button 
-                      onClick={() => setIsModalOpen(true)}
-                      className="flex items-center border border-black group hover:bg-transparent transition-colors duration-300"
-                    >
-                      <span className="px-5 py-2.5 text-[11px] tracking-widest uppercase font-mono font-medium">View Project</span>
-                      <span className="border-l border-black p-2.5 group-hover:bg-black group-hover:text-white transition-colors duration-300">
-                        <ArrowUpRight className="w-4 h-4" />
-                      </span>
-                    </button>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            
-            {/* Image bleeds out of the beige box to the right */}
-            <div className="w-full lg:w-[calc(67.5%+2rem)] mt-10 lg:mt-0 relative z-20 shrink-0 aspect-[4/3] lg:aspect-auto lg:h-[450px] overflow-hidden shadow-2xl bg-gray-200">
+          {/* Left: Project Display */}
+          <div className="w-full lg:w-[65%] flex flex-col h-full relative">
+            {/* Image Area */}
+            <div 
+              ref={imageContainerRef}
+              className="w-full h-[300px] md:h-[400px] lg:h-auto lg:flex-1 relative overflow-hidden shadow-xl bg-gray-200 mb-6 lg:mb-8 rounded-sm shrink-0 lg:shrink cursor-grab active:cursor-grabbing"
+            >
               <AnimatePresence mode="wait">
                 <motion.img 
                   key={activeIndex}
@@ -260,33 +289,86 @@ export function FeaturedProjects() {
                 />
               </AnimatePresence>
             </div>
+
+            {/* Text Area */}
+            <div className="w-full shrink-0 flex flex-col md:flex-row justify-between items-end gap-6">
+              <div className="flex-1 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <h2 className="text-3xl md:text-4xl lg:text-[2.5rem] leading-[1.1] font-serif mb-3 text-gray-900">
+                      {activeProject.titleLine1} {activeProject.titleLine2}
+                    </h2>
+                    
+                    <div className="flex flex-wrap gap-2 md:gap-4 text-[9px] md:text-[10px] tracking-widest uppercase font-mono mb-3 text-gray-600">
+                      <span>[ {activeProject.size} ]</span>
+                      <span>[ {activeProject.location} ]</span>
+                      <span>[ {activeProject.year} ]</span>
+                    </div>
+                    
+                    <p 
+                      className="text-[11px] md:text-xs tracking-widest uppercase font-mono max-w-md leading-relaxed text-gray-800"
+                      dangerouslySetInnerHTML={{ __html: activeProject.description.replace(/<br\/>/g, ' ') }}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <div className="shrink-0 pb-1">
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex items-center border border-black group hover:bg-transparent transition-colors duration-300"
+                >
+                  <span className="px-5 py-2.5 text-[10px] tracking-widest uppercase font-mono font-medium">View Project</span>
+                  <span className="border-l border-black p-2.5 group-hover:bg-black group-hover:text-white transition-colors duration-300">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Project List */}
-          <div className="border-t border-black/20 relative z-20 max-h-[350px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {projectList.map((project, index) => (
-              <div 
-                key={index} 
-                className="group relative flex items-center py-4 px-3 border-b border-black/20 overflow-hidden cursor-pointer"
-                onClick={() => {
-                  setActiveIndex(index);
-                  setPauseKey(prev => prev + 1);
-                }}
-              >
-                {/* Hover Background - Smooth lamina flow slide up */}
-                <div className={`absolute inset-0 bg-black transition-transform duration-500 ease-[0.22,1,0.36,1] z-0 ${activeIndex === index ? 'translate-y-0' : 'translate-y-[101%] group-hover:translate-y-0'}`}></div>
-                
-                {/* Content */}
-                <div className={`relative z-10 flex w-full items-center transition-colors duration-300 ${activeIndex === index ? 'text-white' : 'text-black group-hover:text-white'}`}>
-                  <div className={`flex-1 font-serif text-base md:text-lg transform transition-transform duration-500 ease-[0.22,1,0.36,1] ${activeIndex === index ? 'translate-x-4' : 'group-hover:translate-x-4'}`}>{project.name}</div>
-                  <div className={`flex-1 text-center font-mono text-[9px] md:text-[11px] tracking-widest uppercase transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{project.size}</div>
-                  <div className={`flex-1 text-right font-mono text-[9px] md:text-[11px] tracking-widest uppercase pr-4 md:pr-8 transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{project.location}</div>
-                  <div className={`transform transition-transform duration-500 ease-[0.22,1,0.36,1] ${activeIndex === index ? '-translate-x-4' : 'group-hover:-translate-x-4'}`}>
-                    <ArrowUpRight className={`w-4 h-4 transition-opacity duration-500 ${activeIndex === index ? 'opacity-100' : 'opacity-50 group-hover:opacity-100'}`} />
+          {/* Right: Selection Menu */}
+          <div className="w-full lg:w-[35%] flex flex-col h-[400px] lg:h-full border-t lg:border-t-0 lg:border-l border-black/20 pt-8 lg:pt-0 lg:pl-8">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-black/10 shrink-0">
+              <h3 className="text-sm tracking-widest uppercase font-mono font-semibold">Select Project</h3>
+              <span className="text-xs font-mono text-gray-500">{activeIndex + 1} / {projectList.length}</span>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/40">
+              {projectList.map((project, index) => (
+                <div 
+                  key={index} 
+                  className={`group relative flex flex-col py-4 px-4 mb-2 border border-transparent hover:border-black/10 transition-colors cursor-pointer rounded-sm ${activeIndex === index ? 'text-white' : 'text-black hover:bg-black/5'}`}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    setPauseKey(prev => prev + 1);
+                  }}
+                >
+                  {activeIndex === index && (
+                    <motion.div
+                      layoutId="activeProjectBg"
+                      className="absolute inset-0 bg-black rounded-sm z-0"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  <div className="relative z-10 flex justify-between items-center mb-1">
+                    <div className="font-serif text-lg md:text-xl">{project.name}</div>
+                    <ArrowUpRight className={`w-4 h-4 transition-opacity duration-300 ${activeIndex === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`} />
+                  </div>
+                  <div className="relative z-10 flex justify-between items-center">
+                    <div className={`font-mono text-[9px] tracking-widest uppercase transition-opacity duration-300 ${activeIndex === index ? 'opacity-80' : 'opacity-50'}`}>{project.location}</div>
+                    <div className={`font-mono text-[9px] tracking-widest uppercase transition-opacity duration-300 ${activeIndex === index ? 'opacity-80' : 'opacity-50'}`}>{project.year}</div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
         </div>

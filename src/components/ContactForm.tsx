@@ -31,7 +31,7 @@ export const ContactForm = () => {
       pin: true,
       pinSpacing: true,
     });
-  }, { scope: sectionRef });
+  }, { scope: sectionRef, dependencies: [] });
 
   return (
     <div ref={sectionRef} className="bg-[#0a0a0a] text-white min-h-[100dvh] w-full flex items-center pt-20 pb-10 px-6 md:px-12 lg:px-24 overflow-hidden">
