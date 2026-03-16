@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring, useMotionTemplate } from 'framer-motion';
-import { Plus, Minus, ArrowUpRight, X, CheckSquare } from 'lucide-react';
+import { Plus, Minus, ArrowUpRight, X, CheckSquare, MessageSquare } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -237,8 +237,6 @@ export default function App() {
   const [buttonTheme, setButtonTheme] = useState<'light' | 'dark'>('dark');
   const [activeSection, setActiveSection] = useState('home');
   
-  const [isNavPinned, setIsNavPinned] = useState(false);
-  
   const mainRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const bgContainerRef = useRef<HTMLDivElement>(null);
@@ -256,10 +254,13 @@ export default function App() {
 
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
   const [isButtonOverDark, setIsButtonOverDark] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const { scrollY } = useScroll();
   
   useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest >= 400);
     if (latest >= 400) {
       setIsButtonOverDark(false);
       return;
@@ -443,11 +444,10 @@ export default function App() {
     // Pin the navigation
     ScrollTrigger.create({
       trigger: navRef.current,
-      start: "top 0px",
+      start: "top 24px",
       end: "max",
       pin: true,
       pinSpacing: false,
-      onToggle: (self) => setIsNavPinned(self.isActive)
     });
 
     // Theme switching for nav
@@ -503,22 +503,23 @@ export default function App() {
       );
     });
 
-    // Architectural Path Animation
-    const archPaths = gsap.utils.toArray('.arch-path');
-    archPaths.forEach((path: any) => {
-      const length = path.getTotalLength();
-      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        ease: "power2.inOut",
+    // About Us Path Animation
+    if (aboutSectionRef.current && aboutPathRef.current && aboutDotRef.current) {
+      gsap.to(aboutDotRef.current, {
+        motionPath: {
+          path: aboutPathRef.current,
+          align: aboutPathRef.current,
+          alignOrigin: [0.5, 0.5],
+        },
+        ease: "none",
         scrollTrigger: {
           trigger: aboutSectionRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
+          start: "top center",
+          end: "bottom center",
           scrub: 1
         }
       });
-    });
+    }
 
     // Image Parallax and Reveal
     const imgContainers = gsap.utils.toArray('.img-container');
@@ -629,7 +630,7 @@ export default function App() {
             {/* Navigation Options */}
             <nav 
               ref={navRef}
-              className={`flex flex-wrap justify-between items-center w-full px-6 md:px-10 lg:px-12 transition-all duration-500 ${introFinished ? 'opacity-100' : 'opacity-0'} z-[100] ${navTheme === 'dark' ? 'text-white' : 'text-black'} ${isNavPinned ? (navTheme === 'dark' ? 'bg-black/80 backdrop-blur-md py-4' : 'bg-white/90 backdrop-blur-md py-4') : 'py-0'}`}
+              className={`flex flex-wrap justify-between items-center w-full px-6 md:px-10 lg:px-12 gap-y-4 transition-all duration-500 ${introFinished ? 'opacity-100' : 'opacity-0'} z-[100] ${navTheme === 'dark' ? 'text-white' : 'text-black'}`}
             >
               {navItems.map((item, index) => (
                 <div 
@@ -690,15 +691,25 @@ export default function App() {
       
       {/* About Us Section */}
       <div id="who-we-are" ref={aboutSectionRef} className="relative w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
-        {/* Architectural Path Animations */}
-        <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.15]">
-          <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
-            <path className="arch-path" d="M 100 0 L 100 1000" fill="none" stroke="#1a1a1a" strokeWidth="2" />
-            <path className="arch-path" d="M 0 300 L 1000 300" fill="none" stroke="#1a1a1a" strokeWidth="2" />
-            <path className="arch-path" d="M 800 0 L 800 1000" fill="none" stroke="#1a1a1a" strokeWidth="2" />
-            <path className="arch-path" d="M 100 300 L 800 800" fill="none" stroke="#1a1a1a" strokeWidth="2" />
-            <path className="arch-path" d="M 800 300 L 100 800" fill="none" stroke="#1a1a1a" strokeWidth="2" />
-            <rect className="arch-path" x="100" y="300" width="700" height="500" fill="none" stroke="#1a1a1a" strokeWidth="2" />
+        {/* Decorative Path */}
+        <div className="absolute left-4 md:left-12 top-0 bottom-0 w-24 pointer-events-none z-0 opacity-20 hidden md:block">
+          <svg viewBox="0 0 100 1000" preserveAspectRatio="xMidYMax slice" className="w-full h-full">
+            <path 
+              ref={aboutPathRef}
+              id="about-path" 
+              d="M 50 0 C 50 200, 100 300, 50 500 C 0 700, 50 800, 50 1000" 
+              fill="none" 
+              stroke="#1a1a1a" 
+              strokeWidth="2" 
+              strokeDasharray="4 8" 
+            />
+            <rect 
+              ref={aboutDotRef}
+              width="12" 
+              height="12" 
+              fill="#1a1a1a" 
+              transform="translate(-6, -6)" 
+            />
           </svg>
         </div>
 
@@ -826,9 +837,30 @@ export default function App() {
         >
           <button
             id="draggable-fab"
-            className={`rounded-full px-6 py-3 font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors duration-300 cursor-grab active:cursor-grabbing ${(scrollY.get() < 400 ? (isButtonOverDark ? 'dark' : 'light') : buttonTheme) === 'dark' ? 'text-white border border-white hover:bg-white hover:text-black' : 'text-black border border-black hover:bg-black hover:text-white'}`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`flex items-center justify-center rounded-full font-sans font-bold text-[10px] md:text-xs uppercase tracking-widest transition-all duration-500 ease-[0.22,1,0.36,1] cursor-grab active:cursor-grabbing ${(scrollY.get() < 400 ? (isButtonOverDark ? 'dark' : 'light') : buttonTheme) === 'dark' ? 'text-white border border-white hover:bg-white hover:text-black' : 'text-black border border-black hover:bg-black hover:text-white'} ${isScrolled && !isHovered ? 'px-0' : 'px-6'} min-w-[48px] md:min-w-[56px] h-[48px] md:h-[56px]`}
           >
-            Start Your Project
+            <MessageSquare 
+              className={`shrink-0 transition-all duration-500 ease-[0.22,1,0.36,1] ${
+                !isScrolled 
+                  ? 'w-0 h-0 opacity-0 m-0' 
+                  : isHovered 
+                    ? 'w-4 h-4 md:w-5 md:h-5 mr-2 opacity-100' 
+                    : 'w-5 h-5 md:w-6 md:h-6 opacity-100 m-0'
+              }`} 
+            />
+            <div 
+              className={`grid transition-all duration-500 ease-[0.22,1,0.36,1] ${
+                isScrolled && !isHovered 
+                  ? 'grid-cols-[0fr] opacity-0' 
+                  : 'grid-cols-[1fr] opacity-100'
+              }`}
+            >
+              <div className="overflow-hidden flex items-center">
+                <span className="whitespace-nowrap">Start Your Project</span>
+              </div>
+            </div>
           </button>
         </motion.div>
       </AnimatePresence>
