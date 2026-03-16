@@ -67,21 +67,31 @@ export const Testimonials = () => {
       </div>
 
       {/* Decorative Path */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-10 flex justify-center items-center">
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-20 flex justify-center items-center">
         <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+          <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
           <path 
             ref={pathRef}
             id="testimonial-path" 
-            d="M 100 0 C 300 200, 0 500, 500 500 C 1000 500, 700 800, 900 1000" 
+            d="M -100 200 C 300 0, 700 1000, 1100 800" 
             fill="none" 
-            stroke="#ffffff" 
-            strokeWidth="2" 
-            strokeDasharray="10 10" 
+            stroke="rgba(255,255,255,0.15)" 
+            strokeWidth="1" 
+            strokeDasharray="4 12" 
           />
           <circle 
             ref={dotRef}
-            cx="0" cy="0" r="8" 
+            cx="0" cy="0" r="6" 
             fill="#ffffff" 
+            filter="url(#glow)"
           />
         </svg>
       </div>

@@ -237,6 +237,8 @@ export default function App() {
   const [buttonTheme, setButtonTheme] = useState<'light' | 'dark'>('dark');
   const [activeSection, setActiveSection] = useState('home');
   
+  const [isNavPinned, setIsNavPinned] = useState(false);
+  
   const mainRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const bgContainerRef = useRef<HTMLDivElement>(null);
@@ -441,10 +443,11 @@ export default function App() {
     // Pin the navigation
     ScrollTrigger.create({
       trigger: navRef.current,
-      start: "top 24px",
+      start: "top 0px",
       end: "max",
       pin: true,
       pinSpacing: false,
+      onToggle: (self) => setIsNavPinned(self.isActive)
     });
 
     // Theme switching for nav
@@ -500,23 +503,22 @@ export default function App() {
       );
     });
 
-    // About Us Path Animation
-    if (aboutSectionRef.current && aboutPathRef.current && aboutDotRef.current) {
-      gsap.to(aboutDotRef.current, {
-        motionPath: {
-          path: aboutPathRef.current,
-          align: aboutPathRef.current,
-          alignOrigin: [0.5, 0.5],
-        },
-        ease: "none",
+    // Architectural Path Animation
+    const archPaths = gsap.utils.toArray('.arch-path');
+    archPaths.forEach((path: any) => {
+      const length = path.getTotalLength();
+      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+      gsap.to(path, {
+        strokeDashoffset: 0,
+        ease: "power2.inOut",
         scrollTrigger: {
           trigger: aboutSectionRef.current,
-          start: "top center",
-          end: "bottom center",
+          start: "top 80%",
+          end: "bottom 20%",
           scrub: 1
         }
       });
-    }
+    });
 
     // Image Parallax and Reveal
     const imgContainers = gsap.utils.toArray('.img-container');
@@ -627,7 +629,7 @@ export default function App() {
             {/* Navigation Options */}
             <nav 
               ref={navRef}
-              className={`flex flex-wrap justify-between items-center w-full px-6 md:px-10 lg:px-12 gap-y-4 transition-all duration-500 ${introFinished ? 'opacity-100' : 'opacity-0'} z-[100] ${navTheme === 'dark' ? 'text-white' : 'text-black'}`}
+              className={`flex flex-wrap justify-between items-center w-full px-6 md:px-10 lg:px-12 transition-all duration-500 ${introFinished ? 'opacity-100' : 'opacity-0'} z-[100] ${navTheme === 'dark' ? 'text-white' : 'text-black'} ${isNavPinned ? (navTheme === 'dark' ? 'bg-black/80 backdrop-blur-md py-4' : 'bg-white/90 backdrop-blur-md py-4') : 'py-0'}`}
             >
               {navItems.map((item, index) => (
                 <div 
@@ -688,25 +690,15 @@ export default function App() {
       
       {/* About Us Section */}
       <div id="who-we-are" ref={aboutSectionRef} className="relative w-full bg-[#fafafa] text-black py-24 md:py-40 px-6 md:px-12 overflow-hidden" data-theme="light">
-        {/* Decorative Path */}
-        <div className="absolute left-4 md:left-12 top-0 bottom-0 w-24 pointer-events-none z-0 opacity-20 hidden md:block">
-          <svg viewBox="0 0 100 1000" preserveAspectRatio="xMidYMax slice" className="w-full h-full">
-            <path 
-              ref={aboutPathRef}
-              id="about-path" 
-              d="M 50 0 C 50 200, 100 300, 50 500 C 0 700, 50 800, 50 1000" 
-              fill="none" 
-              stroke="#1a1a1a" 
-              strokeWidth="2" 
-              strokeDasharray="4 8" 
-            />
-            <rect 
-              ref={aboutDotRef}
-              width="12" 
-              height="12" 
-              fill="#1a1a1a" 
-              transform="translate(-6, -6)" 
-            />
+        {/* Architectural Path Animations */}
+        <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.15]">
+          <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+            <path className="arch-path" d="M 100 0 L 100 1000" fill="none" stroke="#1a1a1a" strokeWidth="2" />
+            <path className="arch-path" d="M 0 300 L 1000 300" fill="none" stroke="#1a1a1a" strokeWidth="2" />
+            <path className="arch-path" d="M 800 0 L 800 1000" fill="none" stroke="#1a1a1a" strokeWidth="2" />
+            <path className="arch-path" d="M 100 300 L 800 800" fill="none" stroke="#1a1a1a" strokeWidth="2" />
+            <path className="arch-path" d="M 800 300 L 100 800" fill="none" stroke="#1a1a1a" strokeWidth="2" />
+            <rect className="arch-path" x="100" y="300" width="700" height="500" fill="none" stroke="#1a1a1a" strokeWidth="2" />
           </svg>
         </div>
 

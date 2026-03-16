@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 const teamMembers = [
   {
@@ -54,26 +55,91 @@ const teamMembers = [
 export const TeamSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const dotRef = useRef<SVGCircleElement>(null);
 
   useGSAP(() => {
     const container = scrollRef.current;
     if (!container) return;
     
+    const scrollWidth = container.scrollWidth - window.innerWidth;
+
     gsap.to(container, {
-      x: () => -(container.scrollWidth - window.innerWidth),
+      x: -scrollWidth,
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
         pin: true,
         scrub: 1,
-        end: () => "+=" + (container.scrollWidth - window.innerWidth),
+        end: () => "+=" + scrollWidth,
         invalidateOnRefresh: true,
       }
     });
+
+    // Path Animation
+    if (pathRef.current && dotRef.current) {
+      const pathLength = pathRef.current.getTotalLength();
+      gsap.set(pathRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: () => "+=" + scrollWidth,
+          scrub: 1,
+        }
+      });
+
+      tl.to(pathRef.current, {
+        strokeDashoffset: 0,
+        ease: "none"
+      }, 0);
+
+      tl.to(dotRef.current, {
+        motionPath: {
+          path: pathRef.current,
+          align: pathRef.current,
+          alignOrigin: [0.5, 0.5],
+        },
+        ease: "none"
+      }, 0);
+    }
   }, { scope: containerRef, dependencies: [] });
 
   return (
     <section ref={containerRef} className="relative h-[100dvh] bg-[#111] overflow-hidden flex items-center">
+      {/* Decorative SVG Path */}
+      <div className="absolute inset-0 pointer-events-none z-0 flex justify-center items-center opacity-20">
+        <svg width="100%" height="100%" viewBox="0 0 1000 200" preserveAspectRatio="none">
+          <defs>
+            <filter id="glow-team" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <path 
+            ref={pathRef}
+            id="team-path"
+            d="M 0 100 Q 250 0, 500 100 T 1000 100" 
+            fill="none" 
+            stroke="#c1bdae" 
+            strokeWidth="1" 
+            strokeDasharray="4 8"
+          />
+          <circle 
+            ref={dotRef}
+            cx="0" 
+            cy="0" 
+            r="4" 
+            fill="#c1bdae" 
+            filter="url(#glow-team)"
+          />
+        </svg>
+      </div>
+
       {/* Fixed Header */}
       <div className="absolute top-6 md:top-12 left-6 md:left-12 lg:left-24 z-10 pointer-events-none">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-4">

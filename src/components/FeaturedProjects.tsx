@@ -266,14 +266,14 @@ export function FeaturedProjects() {
 
       <div className="w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 h-full flex items-center">
         {/* Beige Box */}
-        <div className="bg-[#f5efe6] relative w-full h-auto lg:h-[90vh] min-h-[600px] max-h-none lg:max-h-[850px] mx-auto p-6 lg:p-10 flex flex-col lg:flex-row gap-8 lg:gap-12 shadow-sm rounded-sm">
+        <div className="bg-[#f5efe6] relative w-full h-auto lg:h-[75vh] min-h-[500px] max-h-none lg:max-h-[800px] mx-auto p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 shadow-sm rounded-sm">
           
           {/* Left: Project Display */}
           <div className="w-full lg:w-[65%] flex flex-col h-full relative">
             {/* Image Area */}
             <div 
               ref={imageContainerRef}
-              className="w-full h-[300px] md:h-[400px] lg:h-auto lg:flex-1 relative overflow-hidden shadow-xl bg-gray-200 mb-6 lg:mb-8 rounded-sm shrink-0 lg:shrink cursor-grab active:cursor-grabbing"
+              className="w-full h-[300px] md:h-[350px] lg:h-auto lg:flex-1 relative overflow-hidden shadow-xl bg-gray-200 mb-4 lg:mb-6 rounded-sm shrink-0 lg:shrink cursor-grab active:cursor-grabbing"
             >
               <AnimatePresence mode="wait">
                 <motion.img 
@@ -301,11 +301,11 @@ export function FeaturedProjects() {
                     exit={{ opacity: 0, y: -15 }}
                     transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <h2 className="text-3xl md:text-4xl lg:text-[2.5rem] leading-[1.1] font-serif mb-3 text-gray-900">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl leading-[1.1] font-serif mb-2 text-gray-900">
                       {activeProject.titleLine1} {activeProject.titleLine2}
                     </h2>
                     
-                    <div className="flex flex-wrap gap-2 md:gap-4 text-[9px] md:text-[10px] tracking-widest uppercase font-mono mb-3 text-gray-600">
+                    <div className="flex flex-wrap gap-2 md:gap-4 text-[9px] md:text-[10px] tracking-widest uppercase font-mono mb-2 text-gray-600">
                       <span>[ {activeProject.size} ]</span>
                       <span>[ {activeProject.location} ]</span>
                       <span>[ {activeProject.year} ]</span>
@@ -334,8 +334,8 @@ export function FeaturedProjects() {
           </div>
 
           {/* Right: Selection Menu */}
-          <div className="w-full lg:w-[35%] flex flex-col h-[400px] lg:h-full border-t lg:border-t-0 lg:border-l border-black/20 pt-8 lg:pt-0 lg:pl-8">
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-black/10 shrink-0">
+          <div className="w-full lg:w-[35%] flex flex-col h-[400px] lg:h-full border-t lg:border-t-0 lg:border-l border-black/20 pt-6 lg:pt-0 lg:pl-6">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-black/10 shrink-0">
               <h3 className="text-sm tracking-widest uppercase font-mono font-semibold">Select Project</h3>
               <span className="text-xs font-mono text-gray-500">{activeIndex + 1} / {projectList.length}</span>
             </div>
@@ -344,7 +344,7 @@ export function FeaturedProjects() {
               {projectList.map((project, index) => (
                 <div 
                   key={index} 
-                  className={`group relative flex flex-col py-4 px-4 mb-2 border border-transparent hover:border-black/10 transition-colors cursor-pointer rounded-sm ${activeIndex === index ? 'text-white' : 'text-black hover:bg-black/5'}`}
+                  className={`group relative flex flex-col py-3 px-4 mb-1 border border-transparent hover:border-black/10 transition-colors cursor-pointer rounded-sm ${activeIndex === index ? 'text-white' : 'text-black hover:bg-black/5'}`}
                   onClick={() => {
                     setActiveIndex(index);
                     setPauseKey(prev => prev + 1);

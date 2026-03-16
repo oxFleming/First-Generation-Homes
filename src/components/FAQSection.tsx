@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+
+gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 const faqs = [
   {
@@ -27,14 +33,79 @@ const faqs = [
 
 export const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const dotRef = useRef<SVGCircleElement>(null);
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  useGSAP(() => {
+    if (pathRef.current && dotRef.current) {
+      const pathLength = pathRef.current.getTotalLength();
+      gsap.set(pathRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          scrub: 1,
+        }
+      });
+
+      tl.to(pathRef.current, {
+        strokeDashoffset: 0,
+        ease: "none"
+      }, 0);
+
+      tl.to(dotRef.current, {
+        motionPath: {
+          path: pathRef.current,
+          align: pathRef.current,
+          alignOrigin: [0.5, 0.5],
+        },
+        ease: "none"
+      }, 0);
+    }
+  }, { scope: sectionRef, dependencies: [] });
+
   return (
-    <section id="faq" className="py-24 bg-[#111] text-white" data-theme="dark">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="faq" ref={sectionRef} className="relative py-24 bg-[#111] text-white overflow-hidden" data-theme="dark">
+      {/* Decorative SVG Path */}
+      <div className="absolute inset-0 pointer-events-none z-0 flex justify-center items-center opacity-20">
+        <svg width="100%" height="100%" viewBox="0 0 200 1000" preserveAspectRatio="none">
+          <defs>
+            <filter id="glow-faq" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <path 
+            ref={pathRef}
+            id="faq-path"
+            d="M 100 0 Q 0 250, 100 500 T 100 1000" 
+            fill="none" 
+            stroke="#c1bdae" 
+            strokeWidth="1" 
+            strokeDasharray="4 8"
+          />
+          <circle 
+            ref={dotRef}
+            cx="0" 
+            cy="0" 
+            r="4" 
+            fill="#c1bdae" 
+            filter="url(#glow-faq)"
+          />
+        </svg>
+      </div>
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-serif tracking-tight mb-4">Frequently Asked Questions</h2>
           <p className="text-gray-400 max-w-2xl mx-auto font-sans">

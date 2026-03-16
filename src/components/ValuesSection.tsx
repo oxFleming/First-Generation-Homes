@@ -49,34 +49,51 @@ export function ValuesSection() {
   return (
     <>
       <section ref={sectionRef} className="relative w-full min-h-[110vh] flex items-center justify-center overflow-hidden" data-theme="dark">
-        {/* Background Image */}
+        {/* Background Video */}
         <div 
           ref={bgRef}
-          className="absolute inset-0 w-full h-[130%] -top-[15%] bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop")' }}
+          className="absolute inset-0 w-full h-[130%] -top-[15%]"
         >
+          <video
+            src="https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-house-4170-large.mp4"
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
           {/* Subtle overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-black/50"></div>
         </div>
 
         {/* Decorative SVG Path */}
-        <div className="absolute inset-0 pointer-events-none z-20 flex justify-center items-center opacity-30">
+        <div className="absolute inset-0 pointer-events-none z-20 flex justify-center items-center opacity-40">
           <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <filter id="glow-values" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
             <path 
               ref={pathRef}
               id="values-path"
-              d="M 500 0 C 700 300, 300 700, 500 1000" 
+              d="M 500 0 C 800 250, 200 750, 500 1000" 
               fill="none" 
-              stroke="white" 
+              stroke="rgba(255,255,255,0.2)" 
               strokeWidth="1" 
-              strokeDasharray="4 8"
+              strokeDasharray="4 12"
             />
             <circle 
               ref={circleRef}
               cx="0" 
               cy="0" 
-              r="8" 
-              fill="#f5efe6" 
+              r="6" 
+              fill="#ffffff" 
+              filter="url(#glow-values)"
             />
           </svg>
         </div>

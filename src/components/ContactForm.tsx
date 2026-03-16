@@ -3,12 +3,15 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 import { Send, MessageCircle } from 'lucide-react';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 export const ContactForm = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const dotRef = useRef<SVGCircleElement>(null);
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -31,11 +34,72 @@ export const ContactForm = () => {
       pin: true,
       pinSpacing: true,
     });
+
+    // Path Animation
+    if (pathRef.current && dotRef.current) {
+      const pathLength = pathRef.current.getTotalLength();
+      gsap.set(pathRef.current, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
+
+      const pathTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=500",
+          scrub: 1,
+        }
+      });
+
+      pathTl.to(pathRef.current, {
+        strokeDashoffset: 0,
+        ease: "none"
+      }, 0);
+
+      pathTl.to(dotRef.current, {
+        motionPath: {
+          path: pathRef.current,
+          align: pathRef.current,
+          alignOrigin: [0.5, 0.5],
+        },
+        ease: "none"
+      }, 0);
+    }
   }, { scope: sectionRef, dependencies: [] });
 
   return (
-    <div ref={sectionRef} className="bg-[#0a0a0a] text-white min-h-[100dvh] w-full flex items-center pt-20 pb-10 px-6 md:px-12 lg:px-24 overflow-hidden">
-      <div className="max-w-[1600px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+    <div ref={sectionRef} className="relative bg-gradient-to-br from-[#0a0a0a] via-[#111] to-[#1a1a1a] text-white min-h-[100dvh] w-full flex items-center pt-20 pb-10 px-6 md:px-12 lg:px-24 overflow-hidden">
+      {/* Decorative SVG Path */}
+      <div className="absolute inset-0 pointer-events-none z-0 flex justify-center items-center opacity-10">
+        <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <defs>
+            <filter id="glow-contact" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <path 
+            ref={pathRef}
+            id="contact-path"
+            d="M 1000 0 C 800 300, 200 700, 0 1000" 
+            fill="none" 
+            stroke="#E53935" 
+            strokeWidth="1" 
+            strokeDasharray="4 8"
+          />
+          <circle 
+            ref={dotRef}
+            cx="0" 
+            cy="0" 
+            r="4" 
+            fill="#E53935" 
+            filter="url(#glow-contact)"
+          />
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-[1600px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
         
         {/* Left Column */}
         <div className="flex flex-col justify-center lg:col-span-4">
